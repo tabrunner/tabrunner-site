@@ -83,8 +83,8 @@ export const ptBR: Locale = {
         body: "Toda ação com consequência — pagar, enviar, excluir — pede a sua confirmação antes. Ele tenta de novo quando o provedor falha, um limite de passos evita que a tarefa saia do controle, e o Parar para na hora.",
       },
       {
-        title: "Controlável pelo MCP",
-        body: "Claude Code, Claude Desktop ou qualquer cliente MCP passa uma tarefa para o TabRunner e acompanha até a resposta — mesmo navegador, mesmos logins, tudo marcado no seu histórico.",
+        title: "MCP nos dois sentidos",
+        body: "Claude Code, Claude Desktop ou qualquer cliente MCP passa uma tarefa para o TabRunner e acompanha até a resposta — mesmo navegador, mesmos logins, tudo marcado no seu histórico. E no sentido contrário também: o TabRunner se conecta a servidores MCP remotos cujas ferramentas entram em toda execução — sempre passando pelas travas — e eventos de execução podem ir por POST para um webhook seu.",
       },
       {
         title: "Sem servidor. Nenhum mesmo.",

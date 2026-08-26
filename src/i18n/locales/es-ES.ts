@@ -83,8 +83,8 @@ export const esES: Locale = {
         body: "Toda acción con consecuencias — pagar, enviar, borrar — pide tu confirmación antes. Reintenta cuando el proveedor falla, un límite de pasos evita que la tarea se descontrole, y Detener detiene al instante.",
       },
       {
-        title: "Controlable por MCP",
-        body: "Claude Code, Claude Desktop o cualquier cliente MCP le pasa una tarea a TabRunner y la sigue hasta la respuesta — mismo navegador, mismas sesiones, todo marcado en tu historial.",
+        title: "MCP en ambas direcciones",
+        body: "Claude Code, Claude Desktop o cualquier cliente MCP le pasa una tarea a TabRunner y la sigue hasta la respuesta — mismo navegador, mismas sesiones, todo marcado en tu historial. Y al revés también: TabRunner se conecta a servidores MCP remotos cuyas herramientas se suman a cada ejecución — siempre pasando por los frenos — y los eventos de ejecución pueden llegar por POST a un webhook tuyo.",
       },
       {
         title: "Sin servidor. Ninguno en absoluto.",

@@ -77,8 +77,8 @@ export const enUS = {
         body: "Consequential actions — paying, sending, deleting — ask for your confirmation first. Retries ride out provider hiccups, a step budget caps runaways, and Stop actually stops.",
       },
       {
-        title: "Drivable over MCP",
-        body: "Claude Code, Claude Desktop or any MCP client can hand TabRunner a task and follow it to the answer — same browser, same logins, labelled in your history.",
+        title: "Two-way MCP",
+        body: "Claude Code, Claude Desktop or any MCP client can hand TabRunner a task — same browser, same logins, labelled in your history. And it dials out too: remote MCP servers' tools join every run behind the plan gate, and run events can POST to your own webhook.",
       },
       {
         title: "No server. At all.",
