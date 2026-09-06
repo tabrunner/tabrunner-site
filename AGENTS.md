@@ -36,14 +36,14 @@ version.
   Footer, Nav, RunConsole, CometField, CometMark).
 - **i18n:** en-US / pt-BR / es-ES, catalogs in `src/i18n/locales/*.ts` (typed off en-US). Add keys
   to all three catalogs in the same edit. No user-visible string is a literal.
-- **The URL decides the language, not the browser.** `/` is en-US, `/pt-br` and `/es` carry a
+- **The URL decides the language, not the browser.** `/` is en-US, `/pt` and `/es` carry a
   lowercase segment (`src/config/locale.ts`); the switcher is three `<a href>`s. Detection survives
   as ONE hop off an unprefixed address, before the first render, which a crawler never takes.
 - **Every published page is a real file.** `scripts/prerender.ts` renders each row of
   `src/config/publicPages.ts` in each language it is published in, with its own head (`<html lang>`,
   title, description, canonical, reciprocal hreflang + x-default), and writes a 404 shell per
-  language, `sitemap.xml` and `robots.txt`. Files are FLAT (`pt-br.html`, never `pt-br/index.html`:
-  a directory index makes `/pt-br` a 308). `assertRendered` fails the BUILD on the bytes written.
+  language, `sitemap.xml` and `robots.txt`. Files are FLAT (`pt.html`, never `pt/index.html`:
+  a directory index makes `/pt` a 308). `assertRendered` fails the BUILD on the bytes written.
   There is no catch-all rewrite — a miss is a real 404. A page in `App.tsx` but not in the registry
   ships nothing; add both. The legal docs publish in English only, because that is the only
   language they are written in.

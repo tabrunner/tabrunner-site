@@ -6,5 +6,12 @@
 # matches the language tree the address was under, so a wrong link under /pt-br explains itself in
 # Portuguese. Status 404 (not 200), which is also why naming an .html destination is safe here:
 # Pages normalizes extensionless destinations on 200 rewrites only.
-/pt-br/*   /pt-br/404.html   404
+# Portuguese moved from /pt-br to /pt on Sep 6 2026 — the hreflang TAG still says pt-BR, only the
+# address changed. A 301 rather than nothing: those addresses were published, and dropping them
+# turns each into a 404. Permanent, so a crawler moves the credit across instead of keeping two
+# spellings of one page. These come first, because Pages takes the FIRST match.
+/pt-br     /pt          301
+/pt-br/*   /pt/:splat   301
+
+/pt/*      /pt/404.html      404
 /es/*      /es/404.html      404

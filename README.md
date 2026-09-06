@@ -125,7 +125,7 @@ bun run shoot [url]    # screenshot the running site, report horizontal overflow
 `src/i18n/locales/en-US.ts` is the reference locale and its shape is the `Locale` type — the
 other two files fail to typecheck if they drift.
 
-**The URL decides the language.** `/` is English, `/pt-br` is Portuguese, `/es` is Spanish, and
+**The URL decides the language.** `/` is English, `/pt` is Portuguese, `/es` is Spanish, and
 each is a real prerendered file announcing its own `<html lang>`, title, description, canonical and
 hreflang set. It used to be one address whose language depended on who asked — which a crawler
 cannot represent (it fetches an address once, and whatever it got is all that address will ever
@@ -134,7 +134,7 @@ shows the other person a different page than the one you were reading).
 
 Detection is not gone, it is demoted: on an *unprefixed* address only, `?lang=` → a remembered
 choice → the browser language can redirect once, before the first render. A reader who followed a
-link to `/pt-br` is never moved off it, and a crawler never takes the hop at all. The legal docs
+link to `/pt` is never moved off it, and a crawler never takes the hop at all. The legal docs
 are synced from the extension repo in English only, so `/privacy` and `/terms` publish at one
 address each instead of three that would claim a language they do not render.
 

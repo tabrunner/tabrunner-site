@@ -8,7 +8,7 @@ import "./index.css";
 
 // The one hop the old language detector still gets: an unprefixed address may send a reader to
 // their own language BEFORE anything renders, so nothing flashes and no history entry is left
-// behind. A reader who followed a link to /pt-br or /es is never moved off it, and a crawler never
+// behind. A reader who followed a link to /pt or /es is never moved off it, and a crawler never
 // takes this at all — which is the whole point, since the address is what carries the language now.
 const hop = redirectTarget(location.pathname, location.search, location.hash);
 if (hop) {

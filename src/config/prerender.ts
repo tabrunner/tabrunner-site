@@ -130,7 +130,7 @@ export function prerenderPage({
 /**
  * Where a rendered page lands.
  *
- * FLAT — `pt-br.html`, `privacy.html`, `pt-br/privacy.html` — never `privacy/index.html`.
+ * FLAT — `pt.html`, `privacy.html`, `pt/privacy.html` — never `privacy/index.html`.
  * Cloudflare Pages serves a directory index at `/privacy/` and answers `/privacy` with a 308, so
  * the directory form would make every canonical and every sitemap entry on this site a redirect
  * to the page rather than the page. A flat file answers 200 at both.

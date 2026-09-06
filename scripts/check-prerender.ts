@@ -2,7 +2,7 @@
  * Self-check for the address rules — the smallest thing that fails if the language routing breaks.
  * No framework: `bun run check`.
  *
- * What it holds is invisible from a browser: `/pt-br` has to BE the Portuguese page, not a redirect
+ * What it holds is invisible from a browser: `/pt` has to BE the Portuguese page, not a redirect
  * to it and not the English one with a different script running.
  */
 import { strict as assert } from "node:assert";
@@ -19,9 +19,9 @@ import { PUBLIC_PAGES, SHELL_ROUTE } from "../src/config/publicPages";
 
 // English is unprefixed; the others carry a lowercase segment.
 assert.equal(localePath("en-US", "/"), "/");
-assert.equal(localePath("pt-BR", "/"), "/pt-br");
+assert.equal(localePath("pt-BR", "/"), "/pt");
 assert.equal(localePath("es-ES", "/"), "/es");
-assert.equal(localePath("pt-BR", "/privacy"), "/pt-br/privacy");
+assert.equal(localePath("pt-BR", "/privacy"), "/pt/privacy");
 assert.equal(localePrefix("en-US"), "");
 
 // Round-trip: what the switcher links to is what the app reads back.
@@ -36,15 +36,15 @@ for (const language of SUPPORTED_LANGUAGES) {
 // A trailing slash is the same page, and an unknown segment is an English path (a 404), never
 // silently the home page.
 assert.deepEqual(splitLocalePath("/privacy/"), { language: "en-US", path: "/privacy" });
-assert.deepEqual(splitLocalePath("/pt-br/"), { language: "pt-BR", path: "/" });
+assert.deepEqual(splitLocalePath("/pt/"), { language: "pt-BR", path: "/" });
 assert.deepEqual(splitLocalePath("/fr"), { language: "en-US", path: "/fr" });
 
 // FLAT files. A directory index is served at `/privacy/` and answers `/privacy` with a 308, which
 // would make every canonical and every sitemap entry on this site a redirect rather than a page.
 assert.equal(pageFile("en-US", "/"), "index.html");
-assert.equal(pageFile("pt-BR", "/"), "pt-br.html");
+assert.equal(pageFile("pt-BR", "/"), "pt.html");
 assert.equal(pageFile("en-US", "/privacy"), "privacy.html");
-assert.equal(pageFile("pt-BR", "/privacy"), "pt-br/privacy.html");
+assert.equal(pageFile("pt-BR", "/privacy"), "pt/privacy.html");
 
 assert.equal(ogLocale("pt-BR"), "pt_BR");
 
@@ -91,9 +91,9 @@ const bake = (language: (typeof SUPPORTED_LANGUAGES)[number], shell = false) =>
 
 const pt = bake("pt-BR");
 assert.ok(pt.includes('<html lang="pt-BR"'), "the page must announce its own language");
-assert.ok(pt.includes('<link rel="canonical" href="https://tabrunner.app/pt-br" />'));
+assert.ok(pt.includes('<link rel="canonical" href="https://tabrunner.app/pt" />'));
 assert.ok(pt.includes('<meta property="og:locale" content="pt_BR" />'));
-assert.ok(pt.includes('<div id="root" data-prerendered-route="/pt-br">'));
+assert.ok(pt.includes('<div id="root" data-prerendered-route="/pt">'));
 // Reciprocal and complete, itself included, plus x-default — a partial set is ignored wholesale by
 // a crawler, which leaves the three pages competing instead of consolidating.
 for (const tag of ["en-US", "pt-BR", "es-ES", "x-default"])

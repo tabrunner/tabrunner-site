@@ -124,7 +124,7 @@ jobs:
           # An unknown path must be a REAL 404 now that `/* /index.html 200` is gone. A soft 404 is
           # a page a search engine indexes as if it were content — here, a full copy of the home
           # page at every typo on the domain.
-          for missing in /nao-existe-esta-pagina /pt-br/nao-existe /es/no-existe; do
+          for missing in /nao-existe-esta-pagina /pt/nao-existe /es/no-existe; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "$ORIGIN$missing")
             if [ "$code" != "404" ]; then
               echo "::error::$missing answered $code — a catch-all rewrite crept back in"
