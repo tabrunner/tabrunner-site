@@ -3,6 +3,15 @@ import type { Locale } from "./en-US";
 /** Español (es-ES) — escrito en español, no traducido palabra por palabra del inglés. */
 export const esES: Locale = {
   langName: "Español",
+  seo: {
+    title: "TabRunner — Tú pones la meta. Él pilota tus pestañas.",
+    description:
+      "Un agente de IA que pilota tu navegador — tus pestañas, tus sesiones, tus cuentas ya iniciadas — con el proveedor de IA que elijas. Solo navegadores Chromium. Sin servidor, sin cuenta, sin telemetría.",
+  },
+  notFound: {
+    title: "Página no encontrada",
+    body: "Esa dirección no existe en tabrunner.app. La página principal está aquí abajo: qué hace TabRunner y cómo instalarlo.",
+  },
   nav: {
     features: "Funciones",
     install: "Instalar",

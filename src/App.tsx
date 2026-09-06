@@ -31,12 +31,17 @@ import { Nav } from "./components/Nav";
 import { Privacy } from "./components/Privacy";
 import { Screenshots } from "./components/Screenshots";
 
-export function App() {
-  // No router: CF Pages serves index.html for every path (public/_redirects),
-  // and the legal pages are plain full-page loads off the landing.
-  const path = window.location.pathname;
-  if (path === "/privacy" || path === "/privacy/") return <LegalPage doc="privacy" />;
-  if (path === "/terms" || path === "/terms/") return <LegalPage doc="terms" />;
+/**
+ * No router, and now no `window` either: the route is passed in.
+ *
+ * The build renders this file to real HTML for every page in every language, where there is no
+ * address to read — and the caller that DOES have one (`main.tsx`) already had to strip the
+ * language segment off it, so reading `location` here would have been a second, disagreeing
+ * answer to the same question.
+ */
+export function App({ route }: { route: string }) {
+  if (route === "/privacy") return <LegalPage doc="privacy" />;
+  if (route === "/terms") return <LegalPage doc="terms" />;
 
   return (
     <>

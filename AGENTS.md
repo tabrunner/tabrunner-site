@@ -13,7 +13,8 @@ deep architecture.
 
 ```bash
 bun run dev      # vite dev server
-bun run build    # tsc --noEmit && vite build → dist/  (this IS the gate — keep it green)
+bun run build    # tsc --noEmit → client build → SSR build → prerender → dist/  (this IS the gate)
+bun run check    # the self-checks: run-console clock + the address/head rules
 bun run sync     # pull product screenshots from ../chrome/docs/screenshots → public/screenshots (webp)
 bun run sync:legal # pull PRIVACY.md/TERMS.md raw from GitHub → src/legal/ (committed; rendered at /privacy, /terms)
 bun run og       # regenerate public/og.png (scripts/gen-og.ts)
@@ -22,7 +23,10 @@ bun run shoot    # screenshot the built site, overflow report → preview/shots/
 
 Deploy: push to `main` fires `.github/workflows/deploy.yml` → Cloudflare Pages project
 `tabrunner` (tabrunner.pages.dev). Secrets `CLOUDFLARE_ACCOUNT_ID` / `CLOUDFLARE_API_TOKEN` live
-in GitHub. Downloads hotlink the extension repo's `releases/latest` aliases — never hardcode a
+in GitHub. The job then **verifies this deployment's own immutable URL** (never the alias, which
+serves the previous build at 200 while the new one activates): every sitemap address must answer
+200 with its own title and language and a rendered body, three typos must be real 404s, and
+robots/sitemap must not be answered by HTML. Downloads hotlink the extension repo's `releases/latest` aliases — never hardcode a
 version.
 
 ## Conventions
@@ -30,9 +34,19 @@ version.
 - Vite + React 19 + Tailwind 4 + bun. TypeScript strict. No component library — hand-built
   sections in `src/components/`, one per section (Hero, Features, Screenshots, Install, Privacy,
   Footer, Nav, RunConsole, CometField, CometMark).
-- **i18n:** en-US / pt-BR / es-ES, catalogs in `src/i18n/locales/*.ts` (typed off en-US).
-  Browser language is the default; `?lang=` overrides; localStorage persists. Add keys to all
-  three catalogs in the same edit. No user-visible string is a literal.
+- **i18n:** en-US / pt-BR / es-ES, catalogs in `src/i18n/locales/*.ts` (typed off en-US). Add keys
+  to all three catalogs in the same edit. No user-visible string is a literal.
+- **The URL decides the language, not the browser.** `/` is en-US, `/pt-br` and `/es` carry a
+  lowercase segment (`src/config/locale.ts`); the switcher is three `<a href>`s. Detection survives
+  as ONE hop off an unprefixed address, before the first render, which a crawler never takes.
+- **Every published page is a real file.** `scripts/prerender.ts` renders each row of
+  `src/config/publicPages.ts` in each language it is published in, with its own head (`<html lang>`,
+  title, description, canonical, reciprocal hreflang + x-default), and writes a 404 shell per
+  language, `sitemap.xml` and `robots.txt`. Files are FLAT (`pt-br.html`, never `pt-br/index.html`:
+  a directory index makes `/pt-br` a 308). `assertRendered` fails the BUILD on the bytes written.
+  There is no catch-all rewrite — a miss is a real 404. A page in `App.tsx` but not in the registry
+  ships nothing; add both. The legal docs publish in English only, because that is the only
+  language they are written in.
 - **Brand:** DESIGN.md is the design system — read it before any visual work. Token scales live
   in `src/index.css` (`field-*` deep indigo grounds, `flare-*` comet-burn emerald = motion,
   `tel-*` amber = measurement, `star-*` text). Two Lights rule: only emerald and amber emit

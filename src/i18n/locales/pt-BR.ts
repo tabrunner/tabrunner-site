@@ -3,6 +3,15 @@ import type { Locale } from "./en-US";
 /** Português (Brasil) — escrito em pt-BR, não traduzido do inglês palavra por palavra. */
 export const ptBR: Locale = {
   langName: "Português (Brasil)",
+  seo: {
+    title: "TabRunner — Você dá o objetivo. Ele pilota as abas.",
+    description:
+      "Um agente de IA que pilota o seu navegador — suas abas, suas sessões, suas contas já logadas — com o provedor de IA que você escolher. Só em navegadores Chromium. Sem servidor, sem conta, sem telemetria.",
+  },
+  notFound: {
+    title: "Página não encontrada",
+    body: "Esse endereço não existe no tabrunner.app. A página principal está logo abaixo: o que o TabRunner faz e como instalar.",
+  },
   nav: {
     features: "Recursos",
     install: "Instalar",

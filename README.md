@@ -15,9 +15,9 @@ Vite · React 19 · Tailwind CSS 4 · i18next · bun. No router, no backend, no 
 ```bash
 bun install
 bun run dev      # http://localhost:5173
-bun run build    # tsc --noEmit && vite build → dist/
+bun run build    # typecheck → client build → SSR build → prerender → dist/
 bun run preview  # serve the built dist/
-bun run check    # self-check for the run console's clock (src/components/runPhase.ts)
+bun run check    # self-checks: the run console's clock, and the address/head rules
 ```
 
 ## Design and product context
@@ -123,12 +123,29 @@ bun run shoot [url]    # screenshot the running site, report horizontal overflow
 ## i18n
 
 `src/i18n/locales/en-US.ts` is the reference locale and its shape is the `Locale` type — the
-other two files fail to typecheck if they drift. Language resolves from `?lang=` → localStorage
-→ browser language, and the choice persists.
+other two files fail to typecheck if they drift.
+
+**The URL decides the language.** `/` is English, `/pt-br` is Portuguese, `/es` is Spanish, and
+each is a real prerendered file announcing its own `<html lang>`, title, description, canonical and
+hreflang set. It used to be one address whose language depended on who asked — which a crawler
+cannot represent (it fetches an address once, and whatever it got is all that address will ever
+mean, so two of the three languages were unreachable) and a reader cannot share (the link you send
+shows the other person a different page than the one you were reading).
+
+Detection is not gone, it is demoted: on an *unprefixed* address only, `?lang=` → a remembered
+choice → the browser language can redirect once, before the first render. A reader who followed a
+link to `/pt-br` is never moved off it, and a crawler never takes the hop at all. The legal docs
+are synced from the extension repo in English only, so `/privacy` and `/terms` publish at one
+address each instead of three that would claim a language they do not render.
+
+Adding a page means adding it to `src/config/publicPages.ts` — that registry is what gets rendered
+to files and what the sitemap lists, so a page can't exist in one and not the other.
 
 ## Deploy
 
-Push to `main` → GitHub Actions builds and deploys `dist/` to Cloudflare Pages
-(`.github/workflows/deploy.yml`). Needs `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
+Push to `main` → GitHub Actions checks, builds, deploys `dist/` to Cloudflare Pages and then
+verifies the deployment it just made — against its own immutable URL, never the alias, which keeps
+serving the previous build at 200 while the new one activates (`.github/workflows/deploy.yml`).
+Needs `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
 repository secrets, and a Pages project whose name matches `--project-name` in the workflow.
 `tabrunner.app` attaches as the custom domain.

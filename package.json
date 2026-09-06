@@ -6,9 +6,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build:client": "vite build",
+    "build:server": "vite build --ssr src/entry-server.tsx --outDir dist-ssr",
+    "build": "tsc --noEmit && bun run build:client && bun run build:server && bun scripts/prerender.ts",
     "typecheck": "tsc --noEmit",
-    "check": "bun run scripts/check-run-phase.ts",
+    "check": "bun run scripts/check-run-phase.ts && bun run scripts/check-prerender.ts",
     "preview": "vite preview",
     "sync": "bun run scripts/sync-assets.ts",
     "sync:legal": "bun run scripts/sync-legal.ts",

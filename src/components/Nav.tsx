@@ -1,5 +1,11 @@
 import { useTranslation } from "react-i18next";
-import i18n, { SUPPORTED_LANGUAGES, type SupportedLanguage } from "../i18n";
+import { rememberLanguage } from "../i18n";
+import {
+  htmlLang,
+  localePath,
+  splitLocalePath,
+  SUPPORTED_LANGUAGES,
+} from "../config/locale";
 import { LINKS } from "../lib/links";
 import { CometMark } from "./CometMark";
 import { GithubMark } from "./GithubMark";
@@ -15,11 +21,20 @@ import { GithubMark } from "./GithubMark";
  * links collapse.
  */
 export function Nav() {
-  const { t } = useTranslation();
+  // `i18n` from the hook, never the module's default instance: the build renders three languages
+  // in one process through a provider, and the singleton is stuck on the default there — so
+  // reading it would mark EN current on the Portuguese page and hand React a hydration mismatch.
+  const { t, i18n } = useTranslation();
 
-  const switchLanguage = (lng: SupportedLanguage) => {
-    void i18n.changeLanguage(lng);
-  };
+  // The switcher is three LINKS, not a `changeLanguage` call. Switching in place left the reader
+  // at an address that said English while showing Portuguese: the link they shared showed the
+  // other person a different page, and a crawler could not reach two of the three languages at
+  // all. These are also the only in-page links between the versions, which is how a crawler learns
+  // they are one page rather than three thin competing ones.
+  // "/" during the build, where there is no address — and Nav only ever renders on the home page,
+  // so that is also what the browser computes on the very same markup.
+  const route =
+    typeof window === "undefined" ? "/" : splitLocalePath(window.location.pathname).path;
 
   return (
     <header className="sticky top-0 z-20 border-b border-field-600/50 bg-field-900/80 backdrop-blur-md">
@@ -94,11 +109,12 @@ export function Nav() {
             className="flex items-center rounded-full border border-field-600/70 p-0.5 font-mono text-[11px]"
           >
             {SUPPORTED_LANGUAGES.map((lng) => (
-              <button
+              <a
                 key={lng}
-                type="button"
-                onClick={() => switchLanguage(lng)}
-                aria-pressed={i18n.language === lng}
+                href={localePath(lng, route)}
+                hrefLang={htmlLang(lng)}
+                onClick={() => rememberLanguage(lng)}
+                aria-current={i18n.language === lng ? "true" : undefined}
                 title={i18n.getFixedT(lng)("langName")}
                 className={`rounded-full px-2 py-1 transition-colors ${
                   i18n.language === lng
@@ -110,7 +126,7 @@ export function Nav() {
                   {lng === "en-US" ? "EN" : lng === "pt-BR" ? "PT" : "ES"}
                 </span>
                 <span className="sr-only">{i18n.getFixedT(lng)("langName")}</span>
-              </button>
+              </a>
             ))}
           </div>
 

@@ -4,6 +4,15 @@
  */
 export const enUS = {
   langName: "English",
+  seo: {
+    title: "TabRunner — You give the goal. It runs the tabs.",
+    description:
+      "An AI agent that drives your real browser — your tabs, sessions and logins — through any provider you choose. Chromium only. No server, no account, no telemetry.",
+  },
+  notFound: {
+    title: "Page not found",
+    body: "That address doesn't exist on tabrunner.app. The landing page is below — what TabRunner does, and how to install it.",
+  },
   nav: {
     features: "Features",
     install: "Install",

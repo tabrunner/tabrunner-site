@@ -2,3 +2,6 @@ node_modules/
 dist/
 preview/
 .DS_Store
+
+# The SSR bundle the prerender renders from — a build artifact like dist/
+dist-ssr/

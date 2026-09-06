@@ -1,1 +1,10 @@
-/* /index.html 200
+# No catch-all. Every published address is a real file, so a miss must be a real 404 — the
+# `/* /index.html 200` this replaces answered every typo on the domain with the home page, which a
+# search engine indexes as content (a soft 404) and a reader mistakes for the page they asked for.
+#
+# Pages serves the root 404.html for a miss on its own; these two rules only pick the shell that
+# matches the language tree the address was under, so a wrong link under /pt-br explains itself in
+# Portuguese. Status 404 (not 200), which is also why naming an .html destination is safe here:
+# Pages normalizes extensionless destinations on 200 rewrites only.
+/pt-br/*   /pt-br/404.html   404
+/es/*      /es/404.html      404
