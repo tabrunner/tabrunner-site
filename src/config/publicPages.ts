@@ -20,6 +20,22 @@ export function legalSourceFile(doc: LegalDoc, language: SupportedLanguage): str
   return `${doc.toUpperCase()}${LEGAL_SOURCE_SUFFIX[language]}.md`;
 }
 
+/**
+ * The reverse: which page a relative link inside a legal doc names.
+ *
+ * The language is in the FILENAME, never the language of the page holding the link — each
+ * translation links `TERMS.md` to say the English text governs, and that has to land on the
+ * English page rather than back on itself. Null for anything that is not a legal doc.
+ */
+export function legalLinkTarget(
+  file: string,
+): { doc: LegalDoc; language: SupportedLanguage } | null {
+  const match = /^(PRIVACY|TERMS)(\.[\w-]+)?\.md$/.exec(file);
+  if (!match) return null;
+  const language = SUPPORTED_LANGUAGES.find((l) => LEGAL_SOURCE_SUFFIX[l] === (match[2] ?? ""));
+  return language ? { doc: match[1] === "PRIVACY" ? "privacy" : "terms", language } : null;
+}
+
 export interface PublicPage {
   path: string;
   /**

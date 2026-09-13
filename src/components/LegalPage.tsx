@@ -7,7 +7,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useTranslation } from "react-i18next";
 import { localePath, type SupportedLanguage } from "../config/locale";
-import { type LegalDoc, legalSourceFile } from "../config/publicPages";
+import { type LegalDoc, legalLinkTarget, legalSourceFile } from "../config/publicPages";
 import { useLanguage } from "../i18n";
 import { CometMark } from "./CometMark";
 import privacyEn from "../legal/privacy.md?raw";
@@ -27,20 +27,16 @@ const GITHUB_BLOB = "https://github.com/tabrunner/tabrunner/blob/main/";
 
 /**
  * The docs cross-link each other and the repo with relative paths
- * ([PRIVACY.md](PRIVACY.md), [LICENSE](LICENSE)). On the site, a link to either legal doc — in
- * whichever language's file it names — resolves to that doc's route in the page's own language;
- * every other relative link goes to the file on GitHub.
+ * ([PRIVACY.md](PRIVACY.md), [LICENSE](LICENSE)). A link to either legal doc resolves to that
+ * doc's route in the language its FILENAME names — the translations link `TERMS.md` to say the
+ * English text governs, so that one has to land on the English page, not on the page you are
+ * reading. Every other relative link goes to the file on GitHub.
  */
-function resolveHref(
-  href: string,
-  language: SupportedLanguage,
-): { href: string; external: boolean } {
+function resolveHref(href: string): { href: string; external: boolean } {
   if (/^https?:\/\//.test(href)) return { href, external: true };
   const file = href.replace(/^\.\//, "");
-  if (/^PRIVACY(\.[\w-]+)?\.md$/.test(file))
-    return { href: localePath(language, "/privacy"), external: false };
-  if (/^TERMS(\.[\w-]+)?\.md$/.test(file))
-    return { href: localePath(language, "/terms"), external: false };
+  const legal = legalLinkTarget(file);
+  if (legal) return { href: localePath(legal.language, `/${legal.doc}`), external: false };
   return { href: GITHUB_BLOB + file, external: true };
 }
 
@@ -100,7 +96,7 @@ export function LegalPage({ doc }: { doc: LegalDoc }) {
               <p className="mt-4 leading-relaxed text-star-300">{children}</p>
             ),
             a: ({ href, children }) => {
-              const resolved = resolveHref(href ?? "", language);
+              const resolved = resolveHref(href ?? "");
               return (
                 <a
                   href={resolved.href}

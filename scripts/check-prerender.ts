@@ -15,7 +15,12 @@ import {
   SUPPORTED_LANGUAGES,
 } from "../src/config/locale";
 import { buildSitemap, pageFile, prerenderPage } from "../src/config/prerender";
-import { legalSourceFile, PUBLIC_PAGES, SHELL_ROUTE } from "../src/config/publicPages";
+import {
+  legalLinkTarget,
+  legalSourceFile,
+  PUBLIC_PAGES,
+  SHELL_ROUTE,
+} from "../src/config/publicPages";
 
 // English is unprefixed; the others carry a lowercase segment.
 assert.equal(localePath("en-US", "/"), "/");
@@ -68,6 +73,16 @@ const privacy = PUBLIC_PAGES.find((p) => p.path === "/privacy")!;
 assert.equal(legalSourceFile("terms", "en-US"), "TERMS.md");
 assert.equal(legalSourceFile("terms", "pt-BR"), "TERMS.pt-BR.md");
 assert.equal(legalSourceFile("privacy", "es-ES"), "PRIVACY.es.md");
+
+// A link inside a doc resolves by the language in the FILENAME, not the language of the page
+// holding it: every translation links `TERMS.md` to say the English text governs, and that link
+// has to leave for the English page instead of pointing back at the page being read.
+assert.deepEqual(legalLinkTarget("TERMS.md"), { doc: "terms", language: "en-US" });
+assert.deepEqual(legalLinkTarget("PRIVACY.pt-BR.md"), { doc: "privacy", language: "pt-BR" });
+assert.deepEqual(legalLinkTarget("TERMS.es.md"), { doc: "terms", language: "es-ES" });
+assert.equal(legalLinkTarget("LICENSE"), null);
+assert.equal(legalLinkTarget("docs/mcp.md"), null);
+assert.equal(legalLinkTarget("TERMS.fr.md"), null);
 
 const TEMPLATE = `<!doctype html>
 <html lang="en">
