@@ -18,6 +18,7 @@ import {
   DEFAULT_LANGUAGE,
   htmlLang,
   localePath,
+  localeSegment,
   SUPPORTED_LANGUAGES,
   type SupportedLanguage,
 } from "../src/config/locale";
@@ -51,31 +52,39 @@ function resolve(language: SupportedLanguage, key: string): string {
   return node;
 }
 
+/** The bold label every version of a legal doc opens its summary with: "**The short version:**",
+ *  "**Em resumo:**", "**En resumen:**". */
+const SUMMARY_LABEL = /^\*\*[^*]+:\*\*\s*/;
+
 /**
- * A legal page's head, taken from the document it renders.
+ * A legal page's head, taken from the document it renders, in the language it renders.
  *
  * The docs are synced from the extension repo (`bun run sync:legal`), so their own H1 and opening
  * sentence are the only version of this copy that cannot drift from what the page actually says.
  */
-function docHead(doc: LegalDoc): { title: string; description: string } {
-  const md = readFileSync(path.join(root, `src/legal/${doc}.md`), "utf8");
+function docHead(doc: LegalDoc, language: SupportedLanguage): { title: string; description: string } {
+  const file = path.join(root, "src/legal", localeSegment(language), `${doc}.md`);
+  const md = readFileSync(file, "utf8");
   const title = /^#\s+(.+)$/m.exec(md)?.[1]?.trim();
-  // Both docs open with a "**The short version:**" paragraph written to be exactly this — the
-  // whole document in three sentences. The `_Last updated…_` line above it is metadata, not a
+  // Each doc opens with a bold-labelled summary paragraph written to be exactly this — the whole
+  // document in three sentences. The `_Last updated…_` line above it is metadata, not a
   // description, and it is what a naive "first paragraph" picks.
   const summary = md
     .split(/\n{2,}/)
     .map((block) => block.trim())
-    .find((block) => /^\*\*The short version:\*\*/.test(block));
+    .find((block) => SUMMARY_LABEL.test(block));
   if (!title || !summary)
-    throw new Error(`prerender: ${doc}.md has no heading or no "The short version" paragraph`);
+    throw new Error(`prerender: ${file} has no heading or no bold-labelled summary paragraph`);
 
   const description = summary
-    .replace(/^\*\*The short version:\*\*\s*/, "")
+    .replace(SUMMARY_LABEL, "")
     .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
     .replace(/[*_`]/g, "")
     .replace(/\s+/g, " ")
-    .trim();
+    .trim()
+    // Portuguese rightly goes lowercase after the label ("o TabRunner é…"); a description stands on
+    // its own, so it starts with a capital.
+    .replace(/^\p{Ll}/u, (letter) => letter.toUpperCase());
   return {
     // The docs title themselves "TabRunner Privacy Policy"; appending the brand again reads as a
     // stutter in a tab and in a search result.
@@ -154,8 +163,8 @@ const emitted = new Set(new Bun.Glob("assets/**").scanSync({ cwd: dist }));
 const written: PrerenderedPage[] = [];
 
 for (const page of PUBLIC_PAGES) {
-  const head = page.doc ? docHead(page.doc) : null;
   for (const language of page.languages) {
+    const head = page.doc ? docHead(page.doc, language) : null;
     const rendered = await renderPage(language, page.path);
     assertAssets(rendered, emitted);
     const out = prerenderPage({

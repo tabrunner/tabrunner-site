@@ -16,7 +16,7 @@ bun run dev      # vite dev server
 bun run build    # tsc --noEmit → client build → SSR build → prerender → dist/  (this IS the gate)
 bun run check    # the self-checks: run-console clock + the address/head rules
 bun run sync     # pull product screenshots from ../chrome/docs/screenshots → public/screenshots (webp)
-bun run sync:legal # pull PRIVACY.md/TERMS.md raw from GitHub → src/legal/ (committed; rendered at /privacy, /terms)
+bun run sync:legal # pull PRIVACY/TERMS (+ .pt-BR/.es translations) raw from GitHub → src/legal/, all or nothing (committed; rendered at /privacy, /terms, and under /pt, /es)
 bun run og       # regenerate public/og.png (scripts/gen-og.ts)
 bun run shoot    # screenshot the built site, overflow report → preview/shots/ (gitignored output)
 ```
@@ -45,8 +45,8 @@ version.
   language, `sitemap.xml` and `robots.txt`. Files are FLAT (`pt.html`, never `pt/index.html`:
   a directory index makes `/pt` a 308). `assertRendered` fails the BUILD on the bytes written.
   There is no catch-all rewrite — a miss is a real 404. A page in `App.tsx` but not in the registry
-  ships nothing; add both. The legal docs publish in English only, because that is the only
-  language they are written in.
+  ships nothing; add both. The legal docs publish in all three languages, because the extension
+  repo carries a translation of each (`TERMS.pt-BR.md`, `PRIVACY.es.md`, …).
 - **Brand:** DESIGN.md is the design system — read it before any visual work. Token scales live
   in `src/index.css` (`field-*` deep indigo grounds, `flare-*` comet-burn emerald = motion,
   `tel-*` amber = measurement, `star-*` text). Two Lights rule: only emerald and amber emit

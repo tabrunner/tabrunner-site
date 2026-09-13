@@ -1,49 +1,66 @@
 /**
- * Legal doc pages (/privacy, /terms). The markdown is synced from the chrome
- * repo by `bun run sync:legal` (scripts/sync-legal.ts) and committed under
- * src/legal/ — the GitHub repo stays the single source of truth, the site
- * renders a static local copy.
+ * Legal doc pages (/privacy, /terms, and the same under /pt and /es). The markdown is synced from
+ * the chrome repo by `bun run sync:legal` (scripts/sync-legal.ts) and committed under src/legal/ —
+ * the GitHub repo stays the single source of truth, the site renders a static local copy.
  */
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useTranslation } from "react-i18next";
+import { localePath, type SupportedLanguage } from "../config/locale";
+import { type LegalDoc, legalSourceFile } from "../config/publicPages";
+import { useLanguage } from "../i18n";
 import { CometMark } from "./CometMark";
-import privacyMd from "../legal/privacy.md?raw";
-import termsMd from "../legal/terms.md?raw";
+import privacyEn from "../legal/privacy.md?raw";
+import termsEn from "../legal/terms.md?raw";
+import privacyPt from "../legal/pt/privacy.md?raw";
+import termsPt from "../legal/pt/terms.md?raw";
+import privacyEs from "../legal/es/privacy.md?raw";
+import termsEs from "../legal/es/terms.md?raw";
 
-const DOCS = { privacy: privacyMd, terms: termsMd } as const;
+const DOCS: Record<SupportedLanguage, Record<LegalDoc, string>> = {
+  "en-US": { privacy: privacyEn, terms: termsEn },
+  "pt-BR": { privacy: privacyPt, terms: termsPt },
+  "es-ES": { privacy: privacyEs, terms: termsEs },
+};
 
 const GITHUB_BLOB = "https://github.com/tabrunner/tabrunner/blob/main/";
 
 /**
  * The docs cross-link each other and the repo with relative paths
- * ([PRIVACY.md](PRIVACY.md), [LICENSE](LICENSE)). On the site, the two legal
- * docs resolve to their local routes; every other relative link goes to the
- * file on GitHub.
+ * ([PRIVACY.md](PRIVACY.md), [LICENSE](LICENSE)). On the site, a link to either legal doc — in
+ * whichever language's file it names — resolves to that doc's route in the page's own language;
+ * every other relative link goes to the file on GitHub.
  */
-function resolveHref(href: string): { href: string; external: boolean } {
+function resolveHref(
+  href: string,
+  language: SupportedLanguage,
+): { href: string; external: boolean } {
   if (/^https?:\/\//.test(href)) return { href, external: true };
   const file = href.replace(/^\.\//, "");
-  if (file === "PRIVACY.md") return { href: "/privacy", external: false };
-  if (file === "TERMS.md") return { href: "/terms", external: false };
+  if (/^PRIVACY(\.[\w-]+)?\.md$/.test(file))
+    return { href: localePath(language, "/privacy"), external: false };
+  if (/^TERMS(\.[\w-]+)?\.md$/.test(file))
+    return { href: localePath(language, "/terms"), external: false };
   return { href: GITHUB_BLOB + file, external: true };
 }
 
-export function LegalPage({ doc }: { doc: keyof typeof DOCS }) {
+export function LegalPage({ doc }: { doc: LegalDoc }) {
   const { t } = useTranslation();
+  const language = useLanguage();
+  const home = localePath(language, "/");
 
   return (
     <div className="min-h-screen bg-field-900">
       <header className="border-b border-field-600/50">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-5 sm:px-6">
-          <a href="/" className="flex items-center gap-2.5 text-flare-400">
+          <a href={home} className="flex items-center gap-2.5 text-flare-400">
             <CometMark size={24} />
             <span className="font-display text-sm font-semibold tracking-wide text-star-100">
               TabRunner
             </span>
           </a>
           <a
-            href="/"
+            href={home}
             className="inline-flex items-center gap-1.5 font-mono text-xs tracking-wider text-star-500 uppercase transition-colors hover:text-flare-300"
           >
             <svg
@@ -83,7 +100,7 @@ export function LegalPage({ doc }: { doc: keyof typeof DOCS }) {
               <p className="mt-4 leading-relaxed text-star-300">{children}</p>
             ),
             a: ({ href, children }) => {
-              const resolved = resolveHref(href ?? "");
+              const resolved = resolveHref(href ?? "", language);
               return (
                 <a
                   href={resolved.href}
@@ -133,13 +150,13 @@ export function LegalPage({ doc }: { doc: keyof typeof DOCS }) {
             ),
           }}
         >
-          {DOCS[doc]}
+          {DOCS[language][doc]}
         </ReactMarkdown>
 
         <p className="mt-14 border-t border-field-600/50 pt-6 font-mono text-xs text-star-500">
           {t("legal.source")}{" "}
           <a
-            href={`${GITHUB_BLOB}${doc === "privacy" ? "PRIVACY.md" : "TERMS.md"}`}
+            href={`${GITHUB_BLOB}${legalSourceFile(doc, language)}`}
             target="_blank"
             rel="noreferrer"
             className="text-flare-300 underline decoration-flare-500/40 underline-offset-4 transition-colors hover:text-flare-200"

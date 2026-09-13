@@ -15,7 +15,8 @@ export const LINKS = {
   repo: "https://github.com/tabrunner/tabrunner",
   issues: "https://github.com/tabrunner/tabrunner/issues",
   license: "https://github.com/tabrunner/tabrunner/blob/main/LICENSE",
-  // Legal docs render in-site (synced from the chrome repo by `bun run sync:legal`).
+  // Legal docs render in-site (synced from the chrome repo by `bun run sync:legal`). English
+  // routes: put them in the reader's language with `localePath`.
   privacy: "/privacy",
   terms: "/terms",
   mcpDocs: "https://github.com/tabrunner/tabrunner/blob/main/docs/mcp.md",

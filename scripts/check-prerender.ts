@@ -15,7 +15,7 @@ import {
   SUPPORTED_LANGUAGES,
 } from "../src/config/locale";
 import { buildSitemap, pageFile, prerenderPage } from "../src/config/prerender";
-import { PUBLIC_PAGES, SHELL_ROUTE } from "../src/config/publicPages";
+import { legalSourceFile, PUBLIC_PAGES, SHELL_ROUTE } from "../src/config/publicPages";
 
 // English is unprefixed; the others carry a lowercase segment.
 assert.equal(localePath("en-US", "/"), "/");
@@ -58,10 +58,16 @@ assert.deepEqual(
   PUBLIC_PAGES.flatMap((page) => page.languages.map((l) => localePath(l, page.path))),
 );
 
-// The legal docs are English-only, so they publish at ONE address rather than three that would
-// announce a language over text they do not render.
-const privacy = PUBLIC_PAGES.find((p) => p.path === "/privacy");
-assert.deepEqual(privacy?.languages, [DEFAULT_LANGUAGE]);
+// The legal docs are translated in the extension repo, so they publish in every language — the
+// `/pt/terms`-style addresses, and the aliases in `public/_redirects` that land on them, need it.
+for (const path of ["/privacy", "/terms"])
+  assert.deepEqual(PUBLIC_PAGES.find((p) => p.path === path)?.languages, SUPPORTED_LANGUAGES);
+const privacy = PUBLIC_PAGES.find((p) => p.path === "/privacy")!;
+
+// The sync pulls each language from its own file beside the English source of truth.
+assert.equal(legalSourceFile("terms", "en-US"), "TERMS.md");
+assert.equal(legalSourceFile("terms", "pt-BR"), "TERMS.pt-BR.md");
+assert.equal(legalSourceFile("privacy", "es-ES"), "PRIVACY.es.md");
 
 const TEMPLATE = `<!doctype html>
 <html lang="en">
@@ -99,17 +105,32 @@ assert.ok(pt.includes('<div id="root" data-prerendered-route="/pt">'));
 for (const tag of ["en-US", "pt-BR", "es-ES", "x-default"])
   assert.ok(pt.includes(`hreflang="${tag}"`), `missing hreflang ${tag}`);
 
-// A page published in one language gets no cluster at all — the honest signal for the legal docs.
-const legal = prerenderPage({
+// A translated legal doc is its own page in the cluster, not the English one under another prefix.
+const ptPrivacy = prerenderPage({
   template: TEMPLATE,
-  page: privacy!,
+  page: privacy,
+  language: "pt-BR",
+  siteUrl: "https://tabrunner.app",
+  title: "Política de privacidade do TabRunner",
+  description: "D",
+  body: { route: "/pt/privacy", html: "<main>oi</main>" },
+}).html;
+assert.ok(ptPrivacy.includes('<link rel="canonical" href="https://tabrunner.app/pt/privacy" />'));
+assert.ok(ptPrivacy.includes('hreflang="es-ES" href="https://tabrunner.app/es/privacy"'));
+assert.ok(ptPrivacy.includes('hreflang="x-default" href="https://tabrunner.app/privacy"'));
+
+// A page published in one language gets no cluster at all — a one-page cluster is a claim about
+// alternates that do not exist.
+const englishOnly = prerenderPage({
+  template: TEMPLATE,
+  page: { ...privacy, languages: [DEFAULT_LANGUAGE] },
   language: DEFAULT_LANGUAGE,
   siteUrl: "https://tabrunner.app",
   title: "Privacy — TabRunner",
   description: "D",
   body: { route: "/privacy", html: "<main>hi</main>" },
 }).html;
-assert.ok(!legal.includes("hreflang"), "an English-only page must claim no alternates");
+assert.ok(!englishOnly.includes("hreflang"), "a single-language page must claim no alternates");
 
 // A 404 must never describe the front door.
 const shell = bake("es-ES", true);

@@ -1,10 +1,13 @@
 import { useTranslation } from "react-i18next";
+import { localePath } from "../config/locale";
+import { useLanguage } from "../i18n";
 import { LINKS } from "../lib/links";
 import { CometMark } from "./CometMark";
 import { GithubMark } from "./GithubMark";
 
 export function Footer() {
   const { t } = useTranslation();
+  const language = useLanguage();
 
   // The store listing is live, so it leads and the zip follows as the
   // developer-mode path — no more plain-text placeholder standing in for it.
@@ -16,8 +19,8 @@ export function Footer() {
   const projectLinks = [
     { label: "GitHub", href: LINKS.repo },
     { label: t("footer.issues"), href: LINKS.issues },
-    { label: t("footer.privacyLink"), href: LINKS.privacy, internal: true },
-    { label: t("footer.termsLink"), href: LINKS.terms, internal: true },
+    { label: t("footer.privacyLink"), href: localePath(language, LINKS.privacy), internal: true },
+    { label: t("footer.termsLink"), href: localePath(language, LINKS.terms), internal: true },
     { label: t("footer.mcpDocs"), href: LINKS.mcpDocs },
   ];
 

@@ -1,4 +1,6 @@
 import { useTranslation } from "react-i18next";
+import { localePath } from "../config/locale";
+import { useLanguage } from "../i18n";
 import { LINKS } from "../lib/links";
 import { CometMark } from "./CometMark";
 
@@ -29,6 +31,7 @@ function Flow() {
  */
 export function Privacy() {
   const { t } = useTranslation();
+  const language = useLanguage();
   const points = t("privacy.points", { returnObjects: true }) as string[];
 
   return (
@@ -53,7 +56,7 @@ export function Privacy() {
             ))}
           </ul>
           <a
-            href={LINKS.privacy}
+            href={localePath(language, LINKS.privacy)}
             className="mt-8 inline-flex items-center gap-2 font-semibold text-flare-300 underline decoration-flare-500/40 underline-offset-4 transition-colors hover:text-flare-200"
           >
             {t("privacy.link")}

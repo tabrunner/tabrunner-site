@@ -1,17 +1,33 @@
-import { DEFAULT_LANGUAGE, type SupportedLanguage, SUPPORTED_LANGUAGES } from "./locale";
+import { type SupportedLanguage, SUPPORTED_LANGUAGES } from "./locale";
 
 /** The legal docs, which are their own source of truth (synced from the extension repo). */
 export type LegalDoc = "privacy" | "terms";
+
+const LEGAL_SOURCE_SUFFIX: Record<SupportedLanguage, string> = {
+  "en-US": "",
+  "pt-BR": ".pt-BR",
+  "es-ES": ".es",
+};
+
+/**
+ * The file a legal doc is authored in, in the extension repo: `TERMS.md` is the English source of
+ * truth, and each translation sits beside it as `TERMS.pt-BR.md` / `TERMS.es.md`.
+ *
+ * Named with the extension's locale tags, not the site's: the Spanish is written for Spain and Latin
+ * America alike, which a file called `es-ES` would say otherwise.
+ */
+export function legalSourceFile(doc: LegalDoc, language: SupportedLanguage): string {
+  return `${doc.toUpperCase()}${LEGAL_SOURCE_SUFFIX[language]}.md`;
+}
 
 export interface PublicPage {
   path: string;
   /**
    * Which languages this page is published in.
    *
-   * The legal docs are synced from `tabrunner/tabrunner` in English only, so they publish at ONE
-   * address instead of three that would announce `lang="pt-BR"` over English text. Localizing the
-   * chrome around a document does not localize the document, and hreflang is a claim about the
-   * page, not about its navigation.
+   * Only languages the page's own TEXT is written in. Localizing the chrome around a document does
+   * not localize the document, and hreflang is a claim about the page, not about its navigation —
+   * the legal docs qualify because the extension repo carries a translation of each.
    */
   languages: readonly SupportedLanguage[];
   /** Head copy from the catalog… */
@@ -50,14 +66,14 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
   },
   {
     path: "/privacy",
-    languages: [DEFAULT_LANGUAGE],
+    languages: SUPPORTED_LANGUAGES,
     doc: "privacy",
     priority: 0.3,
     changeFrequency: "yearly",
   },
   {
     path: "/terms",
-    languages: [DEFAULT_LANGUAGE],
+    languages: SUPPORTED_LANGUAGES,
     doc: "terms",
     priority: 0.3,
     changeFrequency: "yearly",

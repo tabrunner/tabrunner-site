@@ -1,33 +1,47 @@
 /**
- * Syncs the legal docs (PRIVACY.md, TERMS.md) from the extension repo's raw
- * GitHub URLs into src/legal/. The chrome repo stays the single source of
- * truth; the site renders the synced copies at /privacy and /terms, so the
- * pages work offline from GitHub and add no runtime fetch.
+ * Syncs the legal docs from the extension repo's raw GitHub URLs into src/legal/ — each doc in
+ * every language `src/config/publicPages.ts` publishes it in: `TERMS.md` → `legal/terms.md`,
+ * `TERMS.pt-BR.md` → `legal/pt/terms.md`. The chrome repo stays the single source of truth; the
+ * site renders the synced copies at /terms, /pt/terms…, so the pages work offline from GitHub and
+ * add no runtime fetch.
  *
- * The synced files are committed — deploys (CF Pages via GH Actions) build
- * without network access to GitHub, same convention as `bun run sync`.
+ * All or nothing: every file is fetched before any is written, so a translation missing upstream
+ * fails the sync instead of leaving one language a version behind the others.
+ *
+ * The synced files are committed — deploys (CF Pages via GH Actions) build without network access
+ * to GitHub, same convention as `bun run sync`.
  *
  *   bun run sync:legal
  */
 import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { localeSegment } from "../src/config/locale";
+import { legalSourceFile, PUBLIC_PAGES } from "../src/config/publicPages";
 
 const siteRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = join(siteRoot, "src", "legal");
+const RAW = "https://raw.githubusercontent.com/tabrunner/tabrunner/main/";
 
-const DOCS = {
-  privacy: "https://raw.githubusercontent.com/tabrunner/tabrunner/main/PRIVACY.md",
-  terms: "https://raw.githubusercontent.com/tabrunner/tabrunner/main/TERMS.md",
-} as const;
+const docs = PUBLIC_PAGES.flatMap((page) => {
+  const { doc } = page;
+  if (!doc) return [];
+  return page.languages.map((language) => ({
+    url: RAW + legalSourceFile(doc, language),
+    out: join(outDir, localeSegment(language), `${doc}.md`),
+  }));
+});
 
-mkdirSync(outDir, { recursive: true });
+const fetched = await Promise.all(
+  docs.map(async ({ url, out }) => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
+    return { url, out, body: await res.text() };
+  }),
+);
 
-for (const [name, url] of Object.entries(DOCS)) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
-  const body = await res.text();
-  const out = join(outDir, `${name}.md`);
+for (const { url, out, body } of fetched) {
+  mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, body);
-  console.log(`${name}.md <- ${url} (${Math.round(body.length / 1024)}KB)`);
+  console.log(`${relative(siteRoot, out)} <- ${url} (${Math.round(body.length / 1024)}KB)`);
 }

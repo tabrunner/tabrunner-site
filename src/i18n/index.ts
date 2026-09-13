@@ -1,5 +1,5 @@
 import i18n, { type i18n as I18n } from "i18next";
-import { initReactI18next } from "react-i18next";
+import { initReactI18next, useTranslation } from "react-i18next";
 import {
   DEFAULT_LANGUAGE,
   localePath,
@@ -44,6 +44,17 @@ export function createI18n(language: SupportedLanguage): I18n {
 
 function isSupported(value: string): value is SupportedLanguage {
   return (SUPPORTED_LANGUAGES as readonly string[]).includes(value);
+}
+
+/**
+ * The language the page being rendered is in, typed — for building links that stay in it.
+ *
+ * From the hook's instance, never this module's singleton: the build renders three languages in
+ * one process through a provider, and the singleton is stuck on the default there.
+ */
+export function useLanguage(): SupportedLanguage {
+  const { i18n: instance } = useTranslation();
+  return isSupported(instance.language) ? instance.language : DEFAULT_LANGUAGE;
 }
 
 function normalize(tag: string): SupportedLanguage | null {
@@ -123,9 +134,9 @@ export function redirectTarget(pathname: string, search: string, hash: string): 
   // occur — English has no segment at all.
   const wanted = preferredLanguage();
   if (wanted === DEFAULT_LANGUAGE) return null;
-  // Only to a page that EXISTS in that language. The legal docs are English-only, so without this
-  // a Brazilian reader following the footer's Privacy link would be sent to a 404 — a redirect
-  // into nothing is worse than the English page they asked for.
+  // Only to a page that EXISTS in that language: a page published in fewer languages than the
+  // registry supports would otherwise send the reader to a 404, and a redirect into nothing is
+  // worse than the page they asked for.
   const page = PUBLIC_PAGES.find((p) => p.path === here.path);
   if (!page?.languages.includes(wanted)) return null;
   return `${localePath(wanted, here.path)}${search}${hash}`;

@@ -135,8 +135,8 @@ shows the other person a different page than the one you were reading).
 Detection is not gone, it is demoted: on an *unprefixed* address only, `?lang=` → a remembered
 choice → the browser language can redirect once, before the first render. A reader who followed a
 link to `/pt` is never moved off it, and a crawler never takes the hop at all. The legal docs
-are synced from the extension repo in English only, so `/privacy` and `/terms` publish at one
-address each instead of three that would claim a language they do not render.
+are translated in the extension repo (`TERMS.pt-BR.md`, `PRIVACY.es.md`, …) and synced beside the
+English, so `/terms`, `/pt/terms` and `/es/terms` each render their own language.
 
 Adding a page means adding it to `src/config/publicPages.ts` — that registry is what gets rendered
 to files and what the sitemap lists, so a page can't exist in one and not the other.
