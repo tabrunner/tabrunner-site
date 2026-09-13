@@ -13,5 +13,17 @@
 /pt-br     /pt          301
 /pt-br/*   /pt/:splat   301
 
+# The legal pages under the word a reader types in their own language, 301 to the address the
+# sitemap lists. Above the 404 rules, which `/pt/termos` and `/es/terminos` would otherwise match
+# first. `/terms` and `/privacy` need no alias: they ARE the English pages.
+/termos           /pt/terms     301
+/privacidade      /pt/privacy   301
+/terminos         /es/terms     301
+/privacidad       /es/privacy   301
+/pt/termos        /pt/terms     301
+/pt/privacidade   /pt/privacy   301
+/es/terminos      /es/terms     301
+/es/privacidad    /es/privacy   301
+
 /pt/*      /pt/404.html      404
 /es/*      /es/404.html      404
