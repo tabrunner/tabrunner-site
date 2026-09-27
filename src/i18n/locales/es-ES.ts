@@ -158,8 +158,8 @@ export const esES: Locale = {
     title: "Sin estación en tierra",
     sub: "Un agente que pilota tu navegador con la sesión iniciada tiene que responder a la pregunta de los datos antes que a ninguna otra. Esta es la respuesta.",
     points: [
-      "Tus datos van exactamente a dos sitios: la web en la que trabaja el agente y el proveedor de IA que hayas configurado.",
-      "No existe ningún servidor de TabRunner, ni cuenta, ni analítica, ni llamadas a terceros.",
+      "De entrada, tus datos van a dos destinos: la web en la que trabaja el agente y el proveedor de IA que hayas configurado. Cualquier otro destino, como Jev, un servidor MCP o un webhook, solo existe si lo añades tú.",
+      "No existe ningún servidor de TabRunner, ni cuenta, ni analítica, ni llamadas a nadie que no hayas configurado tú.",
       "Los ajustes de los proveedores y el historial de conversaciones se quedan en chrome.storage, en tu dispositivo.",
     ],
     diagramBrowser: "Tu navegador",

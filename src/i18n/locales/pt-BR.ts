@@ -158,8 +158,8 @@ export const ptBR: Locale = {
     title: "Sem estação em terra",
     sub: "Um agente que pilota o seu navegador logado precisa responder à pergunta sobre os dados antes de qualquer outra. A resposta é esta.",
     points: [
-      "Os seus dados vão para exatamente dois lugares: o site em que o agente está trabalhando e o provedor de IA que você configurou.",
-      "Não existe servidor do TabRunner, nem cadastro, nem analytics, nem chamada para terceiros.",
+      "Por padrão, os seus dados vão para dois lugares: o site em que o agente está trabalhando e o provedor de IA que você configurou. Qualquer outro destino, como o Jev, um servidor MCP ou um webhook, só existe se você adicionar.",
+      "Não existe servidor do TabRunner, nem cadastro, nem analytics, nem chamada para ninguém que você não tenha configurado.",
       "As configurações dos provedores e o histórico das conversas ficam no chrome.storage, no seu dispositivo.",
     ],
     diagramBrowser: "Seu navegador",

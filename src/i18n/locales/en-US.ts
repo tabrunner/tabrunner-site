@@ -152,8 +152,8 @@ export const enUS = {
     title: "No ground station",
     sub: "An agent that drives your logged-in browser has to answer the data question first. Here it is.",
     points: [
-      "Data goes to exactly two places: the site the agent is working on, and the AI provider you configured.",
-      "There is no TabRunner server, no account, no analytics, no third-party calls.",
+      "Out of the box, data goes to two places: the site the agent is working on and the AI provider you configured. Anything else, like Jev, an MCP server or a webhook, is something you add.",
+      "There is no TabRunner server, no account, no analytics, and no call to anyone you didn't set up.",
       "Provider configs and conversation history live in chrome.storage, on your device.",
     ],
     diagramBrowser: "Your browser",
