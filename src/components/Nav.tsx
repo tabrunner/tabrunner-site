@@ -1,11 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { rememberLanguage } from "../i18n";
-import {
-  htmlLang,
-  localePath,
-  splitLocalePath,
-  SUPPORTED_LANGUAGES,
-} from "../config/locale";
+import { htmlLang, localePath, splitLocalePath, SUPPORTED_LANGUAGES } from "../config/locale";
 import { LINKS } from "../lib/links";
 import { CometMark } from "./CometMark";
 import { GithubMark } from "./GithubMark";
@@ -69,7 +64,10 @@ export function Nav() {
           <span className="font-mono text-xs text-star-500">tabrunner.app</span>
         </div>
 
-        <nav aria-label={t("nav.sectionsLabel")} className="hidden items-center gap-6 text-sm text-star-300 md:flex">
+        <nav
+          aria-label={t("nav.sectionsLabel")}
+          className="hidden items-center gap-6 text-sm text-star-300 md:flex"
+        >
           <a href="#features" className="transition-colors hover:text-star-100">
             {t("nav.features")}
           </a>
@@ -108,26 +106,33 @@ export function Nav() {
             aria-label={t("nav.languageLabel")}
             className="flex items-center rounded-full border border-field-600/70 p-0.5 font-mono text-[11px]"
           >
-            {SUPPORTED_LANGUAGES.map((lng) => (
-              <a
-                key={lng}
-                href={localePath(lng, route)}
-                hrefLang={htmlLang(lng)}
-                onClick={() => rememberLanguage(lng)}
-                aria-current={i18n.language === lng ? "true" : undefined}
-                title={i18n.getFixedT(lng)("langName")}
-                className={`rounded-full px-2 py-1 transition-colors ${
-                  i18n.language === lng
-                    ? "bg-field-600 text-flare-300"
-                    : "text-star-500 hover:text-star-300"
-                }`}
-              >
-                <span aria-hidden="true">
-                  {lng === "en-US" ? "EN" : lng === "pt-BR" ? "PT" : "ES"}
-                </span>
-                <span className="sr-only">{i18n.getFixedT(lng)("langName")}</span>
-              </a>
-            ))}
+            {SUPPORTED_LANGUAGES.map((lng) => {
+              const query = new URLSearchParams(
+                typeof window === "undefined" ? "" : window.location.search,
+              );
+              query.set("lang", lng);
+              const hash = typeof window === "undefined" ? "" : window.location.hash;
+              return (
+                <a
+                  key={lng}
+                  href={`${localePath(lng, route)}?${query}${hash}`}
+                  hrefLang={htmlLang(lng)}
+                  onClick={() => rememberLanguage(lng)}
+                  aria-current={i18n.language === lng ? "true" : undefined}
+                  title={i18n.getFixedT(lng)("langName")}
+                  className={`rounded-full px-2 py-1 transition-colors ${
+                    i18n.language === lng
+                      ? "bg-field-600 text-flare-300"
+                      : "text-star-500 hover:text-star-300"
+                  }`}
+                >
+                  <span aria-hidden="true">
+                    {lng === "en-US" ? "EN" : lng === "pt-BR" ? "PT" : "ES"}
+                  </span>
+                  <span className="sr-only">{i18n.getFixedT(lng)("langName")}</span>
+                </a>
+              );
+            })}
           </div>
 
           <a
