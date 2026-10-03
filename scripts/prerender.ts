@@ -9,11 +9,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  buildSitemap,
-  type PrerenderedPage,
-  prerenderPage,
-} from "../src/config/prerender";
+import { buildSitemap, type PrerenderedPage, prerenderPage } from "../src/config/prerender";
 import {
   DEFAULT_LANGUAGE,
   htmlLang,
@@ -62,7 +58,10 @@ const SUMMARY_LABEL = /^\*\*[^*]+:\*\*\s*/;
  * The docs are synced from the extension repo (`bun run sync:legal`), so their own H1 and opening
  * sentence are the only version of this copy that cannot drift from what the page actually says.
  */
-function docHead(doc: LegalDoc, language: SupportedLanguage): { title: string; description: string } {
+function docHead(
+  doc: LegalDoc,
+  language: SupportedLanguage,
+): { title: string; description: string } {
   const file = path.join(root, "src/legal", localeSegment(language), `${doc}.md`);
   const md = readFileSync(file, "utf8");
   const title = /^#\s+(.+)$/m.exec(md)?.[1]?.trim();
@@ -88,7 +87,7 @@ function docHead(doc: LegalDoc, language: SupportedLanguage): { title: string; d
   return {
     // The docs title themselves "TabRunner Privacy Policy"; appending the brand again reads as a
     // stutter in a tab and in a search result.
-    title: title.includes("TabRunner") ? title : `${title} — TabRunner`,
+    title: title.includes("TabRunner") ? title : `${title} | TabRunner`,
     description: clamp(description, 300),
   };
 }
@@ -122,10 +121,10 @@ function assertRendered(file: string, html: string, language: SupportedLanguage)
   if (!opened) fail("has no root element at all");
   const at = (opened?.index ?? 0) + (opened?.[0].length ?? 0);
   if (!/^<[a-z]/.test(html.slice(at, at + 200).trimStart()))
-    fail("has no element inside its root — the page did not render");
+    fail("has no element inside its root. The page did not render");
   // Far below any real page here and far above an empty shell or a spinner. It is the only check
   // that fires when a render succeeds and produces almost nothing.
-  if (html.length < 8_000) fail(`is only ${html.length} bytes — that is not the page`);
+  if (html.length < 8_000) fail(`is only ${html.length} bytes. That is not the page`);
 }
 
 /** Every hashed asset the markup points at has to be in `dist`. The SSR build resolves asset
@@ -199,7 +198,7 @@ for (const language of SUPPORTED_LANGUAGES) {
     page: home,
     language,
     siteUrl: origin,
-    title: `${resolve(language, "notFound.title")} — TabRunner`,
+    title: `${resolve(language, "notFound.title")} | TabRunner`,
     description: resolve(language, "notFound.body"),
     body: { route: SHELL_ROUTE, html: await renderPage(language, "/") },
     shell: true,

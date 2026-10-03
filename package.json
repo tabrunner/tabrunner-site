@@ -1,6 +1,6 @@
 {
   "name": "tabrunner-site",
-  "description": "tabrunner.app — marketing/download site for the TabRunner browser agent extension",
+  "description": "tabrunner.app: marketing/download site for the TabRunner browser agent extension",
   "private": true,
   "version": "0.1.0",
   "type": "module",

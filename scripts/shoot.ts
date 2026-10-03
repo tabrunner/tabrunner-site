@@ -51,7 +51,9 @@ async function shoot(name: string, width: number, height: number, lang?: string)
   }, width);
   console.log(
     `${name}: ${width}px viewport, scrollWidth=${overflowers.scrollWidth}` +
-      (overflowers.bad.length ? `\n  OVERFLOW:\n  ${overflowers.bad.join("\n  ")}` : " — no overflow"),
+      (overflowers.bad.length
+        ? `\n  OVERFLOW:\n  ${overflowers.bad.join("\n  ")}`
+        : ". No overflow"),
   );
   await page.close();
 }

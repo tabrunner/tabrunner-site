@@ -4,9 +4,9 @@ import type { Locale } from "./en-US";
 export const ptBR: Locale = {
   langName: "Português (Brasil)",
   seo: {
-    title: "TabRunner — Você dá o objetivo. Ele pilota as abas.",
+    title: "TabRunner: Você dá o objetivo. Ele pilota as abas.",
     description:
-      "Um agente de IA que pilota o seu navegador — suas abas, suas sessões, suas contas já logadas — com o provedor de IA que você escolher. Só em navegadores Chromium. Sem servidor, sem conta, sem telemetria.",
+      "Um agente de IA que pilota o seu navegador com o provedor de IA que você escolher, usando suas abas, sessões e contas já logadas. Só em navegadores Chromium. Sem servidor, sem conta, sem telemetria.",
   },
   notFound: {
     title: "Página não encontrada",
@@ -25,11 +25,11 @@ export const ptBR: Locale = {
   hero: {
     titleA: "Você dá o objetivo.",
     titleB: "Ele pilota as abas.",
-    sub: "Um agente de IA que pilota o seu navegador — o seu mesmo, com as suas abas, as suas sessões e as contas em que você já está logado — usando o provedor de IA que você escolher. Descreva a tarefa no painel lateral: o TabRunner lê as páginas, clica, digita e navega até terminar o serviço.",
+    sub: "Um agente de IA que pilota o seu navegador com o provedor de IA que você escolher, usando as suas abas, sessões e contas em que você já está logado. Descreva a tarefa no painel lateral: o TabRunner lê as páginas, clica, digita e navega até terminar o serviço.",
     ctaPrimary: "Instalar no seu navegador",
     ctaFor: "Instalar no {{browser}}",
     ctaUnsupported:
-      "O TabRunner só funciona em navegadores de desktop baseados no Chrome — abra esta página no Chrome, Brave, Edge, Arc, Opera ou Vivaldi para baixar.",
+      "O TabRunner só funciona em navegadores de desktop baseados no Chrome. Abra esta página no Chrome, Brave, Edge, Arc, Opera ou Vivaldi para baixar.",
     ctaSecondary: "Como instalar",
     missionLabel: "Descreva uma tarefa",
     missionGo: "Lançar",
@@ -40,12 +40,12 @@ export const ptBR: Locale = {
       "Ache o meu código de rastreio e cole no formulário da transportadora…",
     ],
     demoHint:
-      "Lance uma — o que acontece aqui é um bando de cometas cruzando o céu, e mais nada. Para rodar de verdade, precisa da extensão.",
+      "Lance uma. O que acontece aqui é um bando de cometas cruzando o céu, e mais nada. Para rodar de verdade, precisa da extensão.",
     demoLaunched:
       "Esses cometas são a ideia em miniatura. Com a extensão instalada, a tarefa roda no seu navegador mesmo.",
     browsersLabel: "Funciona em",
     chromiumNote:
-      "Só Chromium. Firefox e Safari não têm a API de entrada confiável — em vez de um botão que não funciona, você recebe uma explicação.",
+      "Só Chromium. Firefox e Safari não têm a API de entrada confiável. Em vez de um botão que não funciona, você recebe uma explicação.",
   },
   run: {
     demoBadge: "demo simulada",
@@ -65,35 +65,36 @@ export const ptBR: Locale = {
       { tool: "snapshot", detail: "formulário de despesas, 6 campos" },
     ],
     composing: "Preenchendo o relatório de despesas…",
-    done: "Concluído — relatório de despesas pronto para revisão",
+    done: "Concluído. Relatório de despesas pronto para revisão",
     elapsed: "decorrido",
     tokens: "tokens",
-    stopNote: "O Esc interrompe qualquer execução na hora — inclusive esta, se ela fosse real.",
+    stopNote:
+      "O Esc interrompe qualquer execução na hora, inclusive esta demo se fosse uma tarefa real.",
   },
   features: {
     title: "A vantagem é o seu navegador",
-    sub: "A maioria dos agentes de navegador roda num navegador isolado e sem nenhum login. O TabRunner roda no seu — por isso ele consegue agir nos sites em que você já está logado.",
+    sub: "A maioria dos agentes de navegador roda num navegador isolado e sem nenhum login. O TabRunner roda no seu, por isso ele consegue agir nos sites em que você já está logado.",
     providersMore: "+ qualquer endpoint compatível com OpenAI/Anthropic",
     items: [
       {
         title: "Use o provedor que quiser",
-        body: "São 15 presets para os 12 provedores abaixo — Anthropic, OpenAI e Kimi aparecem duas vezes: faça login com o plano do Claude, do ChatGPT ou da Kimi que você já paga, ou cole uma chave de API. Além de qualquer endpoint que fale o formato da OpenAI ou da Anthropic. Sem lock-in e sem servidor no meio do caminho.",
+        body: "São 15 presets para os 12 provedores abaixo. Anthropic, OpenAI e Kimi aparecem duas vezes: faça login com o plano do Claude, do ChatGPT ou da Kimi que você já paga, ou cole uma chave de API. Além de qualquer endpoint que fale o formato da OpenAI ou da Anthropic. Sem lock-in e sem servidor no meio do caminho.",
       },
       {
         title: "Cliques e teclas de verdade",
-        body: "Os cliques e as teclas passam pelo Chrome DevTools Protocol — são eventos confiáveis de verdade (trusted events), não eventos sintéticos de JavaScript, que telas de login e campos de pagamento ignoram.",
+        body: "Os cliques e as teclas passam pelo Chrome DevTools Protocol. São eventos confiáveis de verdade (trusted events), não eventos sintéticos de JavaScript, que telas de login e campos de pagamento ignoram.",
       },
       {
         title: "Enxerga a página, não o HTML",
-        body: "O modelo lê uma árvore de acessibilidade compacta, nunca o HTML bruto — prompts menores, refs estáveis e senhas ou números de cartão que nunca saem da página.",
+        body: "O modelo lê uma árvore de acessibilidade compacta, nunca o HTML bruto. Isso significa prompts menores e refs estáveis. Senhas e números de cartão nunca saem da página.",
       },
       {
         title: "Travas que seguram",
-        body: "Toda ação com consequência — pagar, enviar, excluir — pede a sua confirmação antes. Ele tenta de novo quando o provedor falha, um limite de passos evita que a tarefa saia do controle, e o Parar para na hora.",
+        body: "Toda ação com consequência (pagar, enviar, excluir) pede a sua confirmação antes. Ele tenta de novo quando o provedor falha, um limite de passos evita que a tarefa saia do controle, e o Parar para na hora.",
       },
       {
         title: "MCP nos dois sentidos",
-        body: "Claude Code, Claude Desktop ou qualquer cliente MCP passa uma tarefa para o TabRunner e acompanha até a resposta — mesmo navegador, mesmos logins, tudo marcado no seu histórico. E no sentido contrário também: o TabRunner se conecta a servidores MCP remotos cujas ferramentas entram em toda execução — sempre passando pelas travas — e eventos de execução podem ir por POST para um webhook seu.",
+        body: "Claude Code, Claude Desktop ou qualquer cliente MCP passa uma tarefa para o TabRunner e acompanha até a resposta, no mesmo navegador, com os mesmos logins e tudo marcado no seu histórico. E no sentido contrário também: o TabRunner se conecta a servidores MCP remotos cujas ferramentas entram em toda execução, sempre passando pelas travas, e eventos de execução podem ir por POST para um webhook seu.",
       },
       {
         title: "Sem servidor. Nenhum mesmo.",
@@ -102,7 +103,7 @@ export const ptBR: Locale = {
     ],
   },
   route: {
-    title: "O trajeto de uma tarefa — do começo ao fim",
+    title: "O trajeto de uma tarefa, do começo ao fim",
     you: "você",
     or: "ou",
     mcp: "um cliente MCP",
@@ -116,14 +117,14 @@ export const ptBR: Locale = {
   },
   shots: {
     title: "O painel é o produto",
-    sub: "Ele não toma conta do navegador — é um painel lateral que trabalha ao lado da página em que você está.",
+    sub: "Ele não toma conta do navegador. É um painel lateral que trabalha ao lado da página em que você está.",
     captions: [
       "O painel lateral, antes de começar uma tarefa",
-      "Uma execução concluída: plano, ações, resumo — e a marca na aba",
+      "Uma execução concluída: plano, ações, resumo e a marca na aba",
       "Provedores: presets ou qualquer endpoint compatível",
       "A pílula de status: a tarefa trabalha enquanto você continua lendo",
     ],
-    note: "Capturas da versão atual — geradas automaticamente, então nunca ficam desatualizadas depois de um redesign.",
+    note: "Capturas da versão atual, geradas automaticamente, então nunca ficam desatualizadas depois de um redesign.",
   },
   install: {
     title: "O plano de voo",
@@ -131,17 +132,17 @@ export const ptBR: Locale = {
     badge: "atualiza sozinho",
     storeTitle: "Instale pela Chrome Web Store",
     steps: [
-      "Instale o TabRunner no seu navegador pela página da loja — dali em diante as atualizações chegam sozinhas.",
+      "Instale o TabRunner no seu navegador pela página da loja. Dali em diante as atualizações chegam sozinhas.",
       "Fixe o cometa na barra de ferramentas e clique nele para abrir o painel lateral.",
-      "Escolha um provedor — faça login com a assinatura que você já paga, ou cole uma chave de API — e descreva uma tarefa.",
+      "Escolha um provedor, faça login com a assinatura que você já paga ou cole uma chave de API e descreva uma tarefa.",
     ],
     storeCta: "Instalar no Chrome",
     caveatsTitle: "Sem letras miúdas",
     caveats: [
-      "Só navegadores Chromium de desktop — Chrome, Brave, Edge, Arc, Opera, Vivaldi. No Edge e no Opera é preciso permitir extensões de outras lojas antes.",
-      "A tela de instalação pede acesso amplo às suas abas. Esse acesso é o produto — é assim que o agente lê as páginas e digita de verdade. O que ele faz com isso está na seção logo abaixo.",
+      "Só navegadores Chromium de desktop: Chrome, Brave, Edge, Arc, Opera, Vivaldi. No Edge e no Opera é preciso permitir extensões de outras lojas antes.",
+      "A tela de instalação pede acesso amplo às suas abas. Esse acesso é o produto: é assim que o agente lê as páginas e digita de verdade. O que ele faz com isso está na seção logo abaixo.",
       "O modelo é por sua conta: uma assinatura de provedor que você já paga, ou uma chave de API. Não existe conta TabRunner nem plano gratuito incluído.",
-      "Já está com a versão descompactada instalada? Remova antes — a da loja usa o mesmo ID de extensão e o Chrome não roda as duas. Remover apaga o armazenamento dela: seus provedores, logins e conversas não vão junto.",
+      "Já está com a versão descompactada instalada? Remova antes. A da loja usa o mesmo ID de extensão e o Chrome não roda as duas. Remover apaga o armazenamento dela: seus provedores, logins e conversas não vão junto.",
     ],
     releaseNotes: "Notas da versão",
     zipTitle: "Prefere não usar a loja?",
@@ -151,7 +152,7 @@ export const ptBR: Locale = {
     zipUpdateBody:
       "Extraia cada ZIP novo por cima dessa mesma pasta, substituindo os arquivos, e clique em ⟳ na página chrome://extensions.",
     zipUpdateWarning:
-      "Nunca remova a extensão para instalar de novo — o Chrome apaga o armazenamento dela na saída, e seus provedores, logins e conversas vão junto.",
+      "Nunca remova a extensão para instalar de novo. O Chrome apaga o armazenamento dela na saída, e seus provedores, logins e conversas vão junto.",
     downloadZip: "Baixar ZIP",
   },
   privacy: {
@@ -165,7 +166,7 @@ export const ptBR: Locale = {
     diagramBrowser: "Seu navegador",
     diagramProvider: "Seu provedor de IA",
     diagramSites: "Os sites que você usa",
-    diagramKeyFlow: "chave de API ou login — direto",
+    diagramKeyFlow: "chave de API ou login, enviados diretamente",
     diagramTaskFlow: "cliques e teclas",
     diagramServer: "servidor do TabRunner",
     diagramServerNone: "não existe",
@@ -177,7 +178,7 @@ export const ptBR: Locale = {
   },
   footer: {
     tagline: "Você dá o objetivo. Ele pilota as abas.",
-    chromium: "Só Chromium — Chrome, Brave, Edge, Arc, Opera, Vivaldi.",
+    chromium: "Só Chromium: Chrome, Brave, Edge, Arc, Opera, Vivaldi.",
     openSource: "Código aberto no GitHub",
     license: "Código aberto, licença MIT.",
     productHeading: "Produto",
