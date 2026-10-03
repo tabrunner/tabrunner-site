@@ -65,8 +65,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" v
   <text x="96" y="196" font-family="JetBrains Mono" font-size="21" letter-spacing="6" fill="#6ee7b7">BROWSER AGENT · ANY PROVIDER</text>
   <text x="92" y="330" font-family="Unbounded" font-weight="600" font-size="76" letter-spacing="-1" fill="#e8eefb">You give the goal.</text>
   <text x="92" y="426" font-family="Unbounded" font-weight="600" font-size="76" letter-spacing="-1" fill="#34d399">It runs the tabs.</text>
-  <text x="96" y="500" font-family="Figtree" font-size="27" fill="#b9c6de">An AI agent drives your real browser — your tabs, sessions</text>
-  <text x="96" y="538" font-family="Figtree" font-size="27" fill="#b9c6de">and logins — through any provider you choose.</text>
+  <text x="96" y="500" font-family="Figtree" font-size="27" fill="#b9c6de">An AI agent drives your real browser, with your tabs, sessions</text>
+  <text x="96" y="538" font-family="Figtree" font-size="27" fill="#b9c6de">and logins, through any provider you choose.</text>
   <text x="96" y="586" font-family="JetBrains Mono" font-size="19" fill="#8797ba">tabrunner.app</text>
   <rect x="0" y="622" width="1200" height="8" fill="#34d399" />
 </svg>`;
@@ -74,11 +74,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" v
 const resvg = new Resvg(svg, {
   fitTo: { mode: "width", value: 1200 },
   font: {
-    fontFiles: [
-      font("Unbounded.ttf"),
-      font("Figtree.ttf"),
-      font("JetBrainsMono.ttf"),
-    ],
+    fontFiles: [font("Unbounded.ttf"), font("Figtree.ttf"), font("JetBrainsMono.ttf")],
     loadSystemFonts: false,
   },
 });

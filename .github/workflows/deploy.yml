@@ -48,7 +48,7 @@ jobs:
           url_re='https://[0-9a-f]+\.[a-z0-9-]+\.pages\.dev'
           if [[ "$log" =~ $url_re ]]; then origin="${BASH_REMATCH[0]}"; else origin=""; fi
           if [ -z "$origin" ]; then
-            echo "::error::could not read the deployment URL from wrangler's output — refusing to verify the alias instead, which may be serving the previous deployment"
+            echo "::error::could not read the deployment URL from wrangler's output. Refusing to verify the alias instead, which may be serving the previous deployment"
             exit 1
           fi
           echo "deployed: $origin"
@@ -77,14 +77,14 @@ jobs:
               streak=$((streak + 1))
               [ "$streak" -ge 2 ] && break
             else
-              [ "$streak" -gt 0 ] && echo "$ORIGIN flapped back to $code — still spreading"
+              [ "$streak" -gt 0 ] && echo "$ORIGIN flapped back to $code. Still spreading"
               streak=0
               echo "waiting for $ORIGIN (got $code)…"
             fi
             sleep 3
           done
           if [ "$streak" -lt 2 ]; then
-            echo "::error::$ORIGIN never answered twice in a row — this deployment did not come up"
+            echo "::error::$ORIGIN never answered twice in a row. This deployment did not come up"
             exit 1
           fi
 
@@ -118,9 +118,9 @@ jobs:
           # The list is read before the loop, never `for loc in $(curl … | grep …)`: when that fetch
           # fails the list is empty, the loop runs zero times, and every page "passes" unchecked.
           code=$(probe "$ORIGIN/sitemap.xml" 200)
-          [ "$code" = "200" ] || { echo "::error::/sitemap.xml answered $code — without it there is no list of pages to check"; exit 1; }
+          [ "$code" = "200" ] || { echo "::error::/sitemap.xml answered $code. Without it there is no list of pages to check"; exit 1; }
           locs=$(grep -oE '<loc>[^<]+</loc>' "$body" | sed -E 's|</?loc>||g' || true)
-          [ -n "$locs" ] || { echo "::error::/sitemap.xml names no pages — every check below would pass by running none"; exit 1; }
+          [ -n "$locs" ] || { echo "::error::/sitemap.xml names no pages. Every check below would pass by running none"; exit 1; }
           for loc in $locs; do
             route=$(echo "$loc" | sed -E 's|https?://[^/]+||')
             [ -n "$route" ] || route=/
@@ -128,20 +128,20 @@ jobs:
             # redirect when the file is `privacy/index.html`, which is how a whole site can publish
             # canonicals that point at redirects.
             code=$(probe "$ORIGIN$route" 200)
-            [ "$code" = "200" ] || { echo "::error::$route answered $code — a sitemap address must be the page, not a redirect to it"; exit 1; }
+            [ "$code" = "200" ] || { echo "::error::$route answered $code. A sitemap address must be the page, not a redirect to it"; exit 1; }
             page=$(cat "$body")
             if [[ "$page" =~ $title_re ]]; then title="${BASH_REMATCH[0]}"; else title=""; fi
             if [[ "$page" =~ $lang_re ]]; then lang="${BASH_REMATCH[0]}"; else lang=""; fi
             echo "$route -> $lang $title"
             [ -n "$title" ] || { echo "::error::$route has no title"; exit 1; }
             if ! [[ "$page" =~ $root_re ]]; then
-              echo "::error::$route ships an empty root — nothing rendered into it"
+              echo "::error::$route ships an empty root. Nothing rendered into it"
               exit 1
             fi
             # Three addresses serving one language is exactly the failure the language prefixes
             # undo, and it is invisible in a browser that happens to be set to that language.
             case "$seen_titles" in
-              *"[$title]"*) echo "::error::$route ships a title another address already shipped — they are the same language"; exit 1 ;;
+              *"[$title]"*) echo "::error::$route ships a title another address already shipped. They are the same language"; exit 1 ;;
             esac
             seen_titles="$seen_titles[$title]"
           done
@@ -152,7 +152,7 @@ jobs:
           for missing in /nao-existe-esta-pagina /pt/nao-existe /es/no-existe; do
             code=$(probe "$ORIGIN$missing" 404)
             if [ "$code" != "404" ]; then
-              echo "::error::$missing answered $code — a catch-all rewrite crept back in"
+              echo "::error::$missing answered $code. A catch-all rewrite crept back in"
               exit 1
             fi
           done
@@ -167,7 +167,7 @@ jobs:
             type=${type%$'\r'}
             echo "$file -> $type"
             if [[ "$type" == *text/html* ]]; then
-              echo "::error::$file serves text/html — it did not deploy, or a catch-all is answering for it"
+              echo "::error::$file serves text/html. It did not deploy, or a catch-all is answering for it"
               exit 1
             fi
           done

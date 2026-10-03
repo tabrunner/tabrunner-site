@@ -111,7 +111,7 @@ export function Privacy() {
             {/* the server that isn't */}
             <div className="col-span-3 mx-auto rounded-xl border border-dashed border-field-500/70 px-6 py-3 text-center">
               <p className="font-mono text-xs text-star-500">
-                <s>{t("privacy.diagramServer")}</s> — {t("privacy.diagramServerNone")}
+                <s>{t("privacy.diagramServer")}</s>: {t("privacy.diagramServerNone")}
               </p>
             </div>
           </div>
