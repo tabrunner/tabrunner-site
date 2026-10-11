@@ -22,11 +22,11 @@ bun run check    # self-checks: the run console's clock, and the address/head ru
 
 ## Design and product context
 
-Three documents own the decisions; read them before changing the surface:
+Two documents own the decisions; read them before changing the surface:
 
 - **`PRODUCT.md`**: who this is for, what may and may not be claimed, distribution reality.
-- **`DESIGN.md`**: "The Comet Field": the palette, type ramp, named rules, component specs.
-- **`.impeccable/surfaces/src-app-tsx.md`**: the surface brief for the landing page.
+- **`DESIGN.md`**: "The Comet Field": the palette, type ramp, named rules, component specs, and the
+  landing page's story under `## Landing`.
 
 The direction contract also lives at the top of `src/App.tsx`. The short version:
 
