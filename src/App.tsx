@@ -15,10 +15,9 @@
  * FIRST VIEWPORT: the page's own browser-chrome bar (comet favicon, omnibox,
  * glowing Download action); headline left with mission line and CTAs; live
  * run console right; comet field canvas behind everything.
- * FORM: grounded candidate 4 — browser chrome as compositional material —
- * assigned by seed f5e6e750 and fused with the user-pinned dark-cosmic
- * energy and the comet-burn palette (the retired royal purple's
- * replacement — the extension wears the same one).
+ * FORM: browser chrome as compositional material, fused with the
+ * user-pinned dark-cosmic energy and the comet-burn palette (it replaced the
+ * retired royal purple, and the extension wears the same palette).
  */
 
 import { CometField } from "./components/CometField";

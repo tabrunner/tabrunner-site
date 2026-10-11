@@ -249,3 +249,44 @@ exactly as the run finishes. Reduced motion shows the finished run.
 - **Don't** let any element glow that isn't live or the primary action.
 - **Don't** use emoji or unicode glyphs as icons; icons are authored SVG in one stroke weight.
 - **Don't** hardcode a version number anywhere — downloads are `releases/latest` aliases only.
+
+## Landing
+
+The landing page (`/`, `src/App.tsx`). Mode: Persuade. The visitor is an AI power user or a
+developer. The page works when they get it in seconds, trust it, and install from the Chrome Web
+Store. The direction contract sits in the opening comment of `src/App.tsx`.
+
+Spine: the route a goal travels from you to the page, drawn as a metro map with one station per feature.
+Driver: the visitor's own mission line. Submitting it starts the page's one animation; everything else stays still.
+Motion: a comet-tab launches across the sky with an amber nucleus flash, over a fixed comet-field canvas.
+
+The direction is "The Comet Field": browser chrome used as the page's material, a dark cosmic
+feel, and the comet-ice palette (it replaced the retired royal purple).
+
+- First screen: a nav drawn as browser chrome; the two-block Unbounded headline ("You give the
+  goal. / It runs the tabs."); a mission line that launches a comet on submit; the main button,
+  _Add to <their browser>_, to the store listing (live since 2026-08-15); browser chips; a
+  simulated live run console on the right; the comet-field canvas fixed behind everything.
+- The Route: the features as stations on a signal-path schematic (you or MCP, the extension hub,
+  a ghost "relay server" spur, the provider, the guardrails gate, the page), each with its
+  evidence beside it. It replaced the 2026-08 icon-card constellation, which a review flagged as
+  the category default. The Route is an instrument at rest (no glow, no motion), so the launch
+  stays the one authored moment.
+- After it: real screenshots in a browser frame with a thumbnail switcher; the install "flight
+  plan" in three stages (add from the store, pin and open the panel, pick a provider), with plain
+  caveats and a fold-down developer-mode zip path; the "No ground station" privacy data map; the
+  footer.
+- Languages: en-US, pt-BR and es-ES. The browser's language is the default, `?lang=` overrides
+  it, localStorage keeps the choice, and the switcher sits in the nav.
+- Constraints: never hardcode a version (latest-alias URLs only, see `src/lib/links.ts`); state
+  the permission and provider caveats and the Chromium-only limit plainly; link the store
+  listing, never a CRX (there is no publisher proof: CRX_REQUIRED_PROOF_MISSING) and never the
+  store's blob URL; no invented proof; screenshots come from `../chrome` through `bun run sync`.
+
+The other ideas behind this page were not written down; only the pick was.
+
+Open: the product screenshots predate the rename ("Regent"/"Regentry", old purple, crown mark)
+and need retaking against the current build. Until then the site labels them as the old brand.
+The extension redesign will take this palette and the comet-tab mark (geometry in
+`src/components/CometMark.tsx`). The Cloudflare Pages project name in
+`.github/workflows/deploy.yml` may need to match the real dashboard project.
