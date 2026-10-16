@@ -1,9 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { rememberLanguage, useLanguage } from "../i18n";
-import { htmlLang, localePath, SUPPORTED_LANGUAGES } from "../config/locale";
+import { useLanguage } from "../i18n";
+import { localePath } from "../config/locale";
 import { LINKS } from "../lib/links";
 import { CometMark } from "./CometMark";
 import { GithubMark } from "./GithubMark";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 /**
  * The page's own browser chrome: favicon + wordmark on the left, an omnibox
@@ -21,20 +22,11 @@ import { GithubMark } from "./GithubMark";
  * section of the home page, in the reader's language.
  */
 export function Nav({ route }: { route: string }) {
-  // `i18n` from the hook, never the module's default instance: the build renders three languages
-  // in one process through a provider, and the singleton is stuck on the default there — so
-  // reading it would mark EN current on the Portuguese page and hand React a hydration mismatch.
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const language = useLanguage();
   const onHome = route === "/";
   const home = localePath(language, "/");
   const section = (id: string) => (onHome ? `#${id}` : `${home}#${id}`);
-
-  // The switcher is three LINKS, not a `changeLanguage` call. Switching in place left the reader
-  // at an address that said English while showing Portuguese: the link they shared showed the
-  // other person a different page, and a crawler could not reach two of the three languages at
-  // all. These are also the only in-page links between the versions, which is how a crawler learns
-  // they are one page rather than three thin competing ones.
 
   return (
     <header className="sticky top-0 z-20 border-b border-field-600/50 bg-field-900/80 backdrop-blur-md">
@@ -105,8 +97,8 @@ export function Nav({ route }: { route: string }) {
           {/*
            * Chrome-bar toolbar icon: borderless, color-only on hover — the
            * bordered pill is reserved for the Download CTA. Below sm the bar
-           * is already full (wordmark, language, Download), so GitHub lives
-           * in the footer on phones instead of overflowing the chrome.
+           * is already full, so GitHub lives in the footer on phones instead of
+           * overflowing the chrome.
            */}
           <a
             href={LINKS.repo}
@@ -118,38 +110,13 @@ export function Nav({ route }: { route: string }) {
           >
             <GithubMark size={16} />
           </a>
-          <div
-            role="group"
-            aria-label={t("nav.languageLabel")}
-            className="flex items-center rounded-full border border-field-600/70 p-0.5 font-mono text-[11px]"
-          >
-            {SUPPORTED_LANGUAGES.map((lng) => {
-              const query = new URLSearchParams(
-                typeof window === "undefined" ? "" : window.location.search,
-              );
-              query.set("lang", lng);
-              const hash = typeof window === "undefined" ? "" : window.location.hash;
-              return (
-                <a
-                  key={lng}
-                  href={`${localePath(lng, route)}?${query}${hash}`}
-                  hrefLang={htmlLang(lng)}
-                  onClick={() => rememberLanguage(lng)}
-                  aria-current={i18n.language === lng ? "true" : undefined}
-                  title={i18n.getFixedT(lng)("langName")}
-                  className={`rounded-full px-2 py-1 transition-colors ${
-                    i18n.language === lng
-                      ? "bg-field-600 text-flare-300"
-                      : "text-star-500 hover:text-star-300"
-                  }`}
-                >
-                  <span aria-hidden="true">
-                    {lng === "en-US" ? "EN" : lng === "pt-BR" ? "PT" : "ES"}
-                  </span>
-                  <span className="sr-only">{i18n.getFixedT(lng)("langName")}</span>
-                </a>
-              );
-            })}
+          {/*
+           * Same reason as GitHub: wordmark, switcher and the store button do not fit a phone
+           * (they need 423 px). Below sm the switcher moves to the footer, and the bar keeps the
+           * one action we want taken.
+           */}
+          <div className="hidden sm:block">
+            <LanguageSwitcher route={route} />
           </div>
 
           <a

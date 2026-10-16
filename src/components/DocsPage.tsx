@@ -196,7 +196,7 @@ export function DocsPage() {
           <P>{rich("docs.faq.update.a")}</P>
         </Topic>
       </main>
-      <Footer />
+      <Footer route={LINKS.docs} />
     </>
   );
 }

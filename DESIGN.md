@@ -214,9 +214,14 @@ running things (or the one action we want taken) may glow.
 - The page's own browser chrome: comet-tab favicon + wordmark left, omnibox pill
   (`tabrunner.app`, mono, lock glyph) center, text links + EN/PT/ES segmented switcher + primary
   Download right. Sticky, backdrop-blurred field-ground.
-- Below `md` the omnibox and section links stand down and the actions cluster (switcher +
-  Download) pins to the right edge — the bar keeps its two anchors, brand and action, at the
-  two margins. The wordmark stays: a 26px mark alone is not a brand.
+- Below `md` the omnibox and section links stand down and the actions cluster pins to the right
+  edge — the bar keeps its two anchors, brand and action, at the two margins. The wordmark stays:
+  a 26px mark alone is not a brand.
+- Below `sm` the EN/PT/ES switcher leaves the bar too, and the footer carries it (44px targets).
+  Wordmark, switcher and the store button need 423px, so on a 390px phone the bar scrolled
+  sideways. The language already follows the browser, so the switcher is an override, and an
+  override belongs at the foot of the page, not beside the action we want taken. Check the bar at
+  320, 360, 390 and 430px in all three languages: Portuguese is the longest.
 
 - Off the home page (Docs) the section links lead to that section of the home page, in the
   reader's language, and the omnibox pill shows the page's own address (`tabrunner.app/docs`).
