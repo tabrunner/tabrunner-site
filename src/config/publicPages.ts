@@ -81,6 +81,14 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     changeFrequency: "weekly",
   },
   {
+    path: "/docs",
+    languages: SUPPORTED_LANGUAGES,
+    titleKey: "docs.seo.title",
+    descriptionKey: "docs.seo.description",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
     path: "/privacy",
     languages: SUPPORTED_LANGUAGES,
     doc: "privacy",

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { rememberLanguage } from "../i18n";
-import { htmlLang, localePath, splitLocalePath, SUPPORTED_LANGUAGES } from "../config/locale";
+import { rememberLanguage, useLanguage } from "../i18n";
+import { htmlLang, localePath, SUPPORTED_LANGUAGES } from "../config/locale";
 import { LINKS } from "../lib/links";
 import { CometMark } from "./CometMark";
 import { GithubMark } from "./GithubMark";
@@ -14,22 +14,27 @@ import { GithubMark } from "./GithubMark";
  * GitHub sits with the actions, not the section anchors: it's an external
  * destination, and the icon keeps it visible on mobile, where the center
  * links collapse.
+ *
+ * It sits on the home page and on the pages that share its chrome (Docs). `route` is the address
+ * without its language segment, passed in because the build renders every page where there is no
+ * `window`. On the home page the section links scroll in place; anywhere else they lead to that
+ * section of the home page, in the reader's language.
  */
-export function Nav() {
+export function Nav({ route }: { route: string }) {
   // `i18n` from the hook, never the module's default instance: the build renders three languages
   // in one process through a provider, and the singleton is stuck on the default there — so
   // reading it would mark EN current on the Portuguese page and hand React a hydration mismatch.
   const { t, i18n } = useTranslation();
+  const language = useLanguage();
+  const onHome = route === "/";
+  const home = localePath(language, "/");
+  const section = (id: string) => (onHome ? `#${id}` : `${home}#${id}`);
 
   // The switcher is three LINKS, not a `changeLanguage` call. Switching in place left the reader
   // at an address that said English while showing Portuguese: the link they shared showed the
   // other person a different page, and a crawler could not reach two of the three languages at
   // all. These are also the only in-page links between the versions, which is how a crawler learns
   // they are one page rather than three thin competing ones.
-  // "/" during the build, where there is no address — and Nav only ever renders on the home page,
-  // so that is also what the browser computes on the very same markup.
-  const route =
-    typeof window === "undefined" ? "/" : splitLocalePath(window.location.pathname).path;
 
   return (
     <header className="sticky top-0 z-20 border-b border-field-600/50 bg-field-900/80 backdrop-blur-md">
@@ -40,7 +45,10 @@ export function Nav() {
         {t("nav.skipToContent")}
       </a>
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4 sm:px-6">
-        <a href="#top" className="flex shrink-0 items-center gap-2.5 text-flare-400">
+        <a
+          href={onHome ? "#top" : home}
+          className="flex shrink-0 items-center gap-2.5 text-flare-400"
+        >
           <CometMark size={26} />
           <span className="font-display text-sm font-semibold tracking-wide text-star-100">
             TabRunner
@@ -61,21 +69,30 @@ export function Nav() {
             <rect x="5" y="10" width="14" height="10" rx="2" />
             <path d="M8 10V7a4 4 0 0 1 8 0v3" />
           </svg>
-          <span className="font-mono text-xs text-star-500">tabrunner.app</span>
+          <span className="font-mono text-xs text-star-500">
+            tabrunner.app{onHome ? "" : localePath(language, route)}
+          </span>
         </div>
 
         <nav
           aria-label={t("nav.sectionsLabel")}
           className="hidden items-center gap-6 text-sm text-star-300 md:flex"
         >
-          <a href="#features" className="transition-colors hover:text-star-100">
+          <a href={section("features")} className="transition-colors hover:text-star-100">
             {t("nav.features")}
           </a>
-          <a href="#install" className="transition-colors hover:text-star-100">
+          <a href={section("install")} className="transition-colors hover:text-star-100">
             {t("nav.install")}
           </a>
-          <a href="#privacy" className="transition-colors hover:text-star-100">
+          <a href={section("privacy")} className="transition-colors hover:text-star-100">
             {t("nav.privacy")}
+          </a>
+          <a
+            href={localePath(language, LINKS.docs)}
+            aria-current={route === LINKS.docs ? "page" : undefined}
+            className="transition-colors hover:text-star-100 aria-[current=page]:text-star-100"
+          >
+            {t("nav.docs")}
           </a>
         </nav>
 

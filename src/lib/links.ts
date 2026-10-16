@@ -11,6 +11,9 @@ export const LINKS = {
    * installs those only through the store's own flow.
    */
   zip: "https://github.com/tabrunner/tabrunner/releases/latest/download/tabrunner-latest-chrome.zip",
+  /** The MCP daemon: one file, and the extension's own Settings → MCP pane hotlinks the same alias. */
+  mcpDaemon:
+    "https://github.com/tabrunner/tabrunner/releases/latest/download/tabrunner-latest-mcp.js",
   releases: "https://github.com/tabrunner/tabrunner/releases/latest",
   repo: "https://github.com/tabrunner/tabrunner",
   issues: "https://github.com/tabrunner/tabrunner/issues",
@@ -19,6 +22,7 @@ export const LINKS = {
   // routes: put them in the reader's language with `localePath`.
   privacy: "/privacy",
   terms: "/terms",
+  docs: "/docs",
   mcpDocs: "https://github.com/tabrunner/tabrunner/blob/main/docs/mcp.md",
   /**
    * Live since 2026-08-15, and the primary CTA everywhere.

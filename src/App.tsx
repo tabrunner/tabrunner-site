@@ -21,6 +21,7 @@
  */
 
 import { CometField } from "./components/CometField";
+import { DocsPage } from "./components/DocsPage";
 import { Features } from "./components/Features";
 import { Footer } from "./components/Footer";
 import { Hero } from "./components/Hero";
@@ -41,11 +42,12 @@ import { Screenshots } from "./components/Screenshots";
 export function App({ route }: { route: string }) {
   if (route === "/privacy") return <LegalPage doc="privacy" />;
   if (route === "/terms") return <LegalPage doc="terms" />;
+  if (route === "/docs") return <DocsPage />;
 
   return (
     <>
       <CometField />
-      <Nav />
+      <Nav route={route} />
       <main id="main">
         <Hero />
         <Features />

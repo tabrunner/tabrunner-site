@@ -17,6 +17,7 @@ export const enUS = {
     features: "Features",
     install: "Install",
     privacy: "Privacy",
+    docs: "Docs",
     download: "Add to Chrome",
     github: "GitHub",
     languageLabel: "Language",
@@ -172,6 +173,82 @@ export const enUS = {
     diagramServerNone: "doesn't exist",
     link: "Read the full privacy policy",
   },
+  docs: {
+    seo: {
+      title: "TabRunner docs: connect Claude Code and fix common problems",
+      description:
+        "Connect Claude Code to TabRunner over MCP, then find answers on supported browsers, your data, approvals and stopping a run.",
+    },
+    title: "Docs",
+    sub: "Connect Claude Code to TabRunner, and get quick answers to the questions we hear most.",
+    installLink: "Haven't installed it yet? Start here.",
+    contentsLabel: "On this page",
+    copy: "Copy",
+    copied: "Copied",
+    mcp: {
+      title: "Connect Claude Code (MCP)",
+      intro:
+        "MCP lets Claude Code give TabRunner a task. TabRunner does the work in your browser, with your logins. These steps are for Claude Code.",
+      enable:
+        "Turn on the bridge. In TabRunner, open Settings → MCP and switch it on. It stays off until you do.",
+      fetch:
+        "Download the daemon. It's one file, and <bun>bun</bun> runs it as it is, so install bun first if you don't have it.",
+      add: "Add it to Claude Code. With <code>--scope user</code> it works in every folder. Without it, Claude Code adds it to the current folder only.",
+      check:
+        "Check the link. Ask Claude Code to run TabRunner's <code>health</code> tool. It says whether the extension is connected, and what to fix if not.",
+      manual:
+        "Every tool, setting and the direct-control mode are in the <manual>full MCP manual</manual>.",
+    },
+    remove: {
+      title: "Remove or update the MCP server",
+      remove: "To remove it, run this:",
+      file: "That unregisters it. The downloaded file stays on your disk. Delete it too if you want it gone:",
+      update:
+        "To update the daemon, run the download command from step 2 again. Nothing else changes.",
+    },
+    faq: {
+      otherFolders: {
+        q: "Claude Code can't find TabRunner in another folder",
+        a1: "Without <code>--scope user</code>, Claude Code keeps the server for the one folder where you added it. Add it again, for every folder:",
+        a2: "The folder-only copy can stay. To remove it, run this in that folder:",
+      },
+      notConnected: {
+        q: "The health tool says the extension isn't connected",
+        lead: "Check these, in order:",
+        items: [
+          "The bridge is on in TabRunner, under Settings → MCP.",
+          "The port matches. If you changed the daemon's port with <code>TABRUNNER_BRIDGE_PORT</code>, enter the same number in Settings → MCP. The default is 17836.",
+          "Your browser is open, with TabRunner installed and on.",
+          "Claude Code lists the server. Run <code>claude mcp list</code>. If tabrunner is missing, add it again, then start a new session.",
+        ],
+        tail: "The daemon starts when Claude Code starts, so there's nothing to keep running.",
+      },
+      browsers: {
+        q: "Which browsers does it run in?",
+        a: "Chromium desktop browsers: Chrome, Brave, Edge, Arc, Opera and Vivaldi. Firefox and Safari have no trusted-input API, so TabRunner can't click and type for real there.",
+      },
+      account: {
+        q: "Do I need a TabRunner account?",
+        a: "No. There's no TabRunner account and no free tier. You bring the model: sign in with a Claude, ChatGPT or Kimi plan you already pay for, or paste an API key. Any endpoint that speaks the OpenAI or Anthropic format works too.",
+      },
+      data: {
+        q: "Where does my data go?",
+        a: "To two places: the site the agent is working on, and the AI provider you set up. Your API key or sign-in goes straight from the extension to that provider. There is no TabRunner server, no analytics and no relay. Your settings and chat history stay in your browser's storage, on your device. An MCP server or a webhook gets data only if you add one. The <privacy>privacy policy</privacy> has the details.",
+      },
+      confirm: {
+        q: "Will it pay, send or delete without asking?",
+        a: "No. You approve the plan before anything happens, and actions that pay, send or delete come back to you for confirmation. One exception to know: when an MCP client clicks through pages itself (direct control), the client has to ask you first. TabRunner's own check isn't in that loop.",
+      },
+      stop: {
+        q: "How do I stop a run?",
+        a: "Press Stop in the side panel. Closing the tab it is driving also ends the run. From an MCP client, call the <code>stop</code> tool.",
+      },
+      update: {
+        q: "How do I update the extension?",
+        a: "From the Chrome Web Store, updates arrive on their own. If you installed the ZIP, unzip each new version over the same folder, then press the reload icon on <code>chrome://extensions</code>. Never remove the extension to reinstall it. Chrome deletes its storage, and your providers, sign-ins and conversations go with it.",
+      },
+    },
+  },
   legal: {
     back: "Back to tabrunner.app",
     source: "Source of truth:",
@@ -188,7 +265,7 @@ export const enUS = {
     issues: "Issues",
     privacyLink: "Privacy policy",
     termsLink: "Terms of use",
-    mcpDocs: "MCP docs",
+    docs: "Docs",
     copyright: "© 2026 Gus",
   },
 };
