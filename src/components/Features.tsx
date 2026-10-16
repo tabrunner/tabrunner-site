@@ -69,7 +69,7 @@ function Leg({ label }: { label?: string }) {
   return (
     <div className={`relative ${label ? "h-12" : "h-6"}`}>
       {label && (
-        <span className="absolute top-1/2 left-10 -translate-y-1/2 font-mono text-[11px] tracking-wider whitespace-nowrap text-star-500 uppercase lg:left-1/2 lg:ml-5">
+        <span className="absolute top-1/2 left-10 -translate-y-1/2 font-mono text-[11px] leading-snug tracking-wider text-star-500 uppercase lg:left-1/2 lg:ml-5 lg:whitespace-nowrap">
           {label}
         </span>
       )}
