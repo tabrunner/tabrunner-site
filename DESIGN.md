@@ -218,6 +218,16 @@ running things (or the one action we want taken) may glow.
   Download) pins to the right edge — the bar keeps its two anchors, brand and action, at the
   two margins. The wordmark stays: a 26px mark alone is not a brand.
 
+- Off the home page (Docs) the section links lead to that section of the home page, in the
+  reader's language, and the omnibox pill shows the page's own address (`tabrunner.app/docs`).
+
+### Command blocks
+
+- A command to paste, on the docs page: field-panel fill, hairline field-border, 12px radius,
+  mono at 12/14px. It wraps instead of scrolling, so the whole command can be read before it is
+  pasted into a terminal. A pill Copy button answers at once ("Copied" for 1.5s); if the browser
+  refuses the clipboard, it selects the command instead. Commands are data and are never translated.
+
 ### Focus
 
 - One flare ring for every focusable thing: `2px` solid flare-bright at `2px` offset, on

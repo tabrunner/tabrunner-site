@@ -33,7 +33,7 @@ version.
 
 - Vite + React 19 + Tailwind 4 + bun. TypeScript strict. No component library — hand-built
   sections in `src/components/`, one per section (Hero, Features, Screenshots, Install, Privacy,
-  Footer, Nav, RunConsole, CometField, CometMark).
+  Footer, Nav, RunConsole, CometField, CometMark), plus the DocsPage and its CodeBlock.
 - **i18n:** en-US / pt-BR / es-ES, catalogs in `src/i18n/locales/*.ts` (typed off en-US). Add keys
   to all three catalogs in the same edit. No user-visible string is a literal.
 - **The URL decides the language, not the browser.** `/` is en-US, `/pt` and `/es` carry a
@@ -47,6 +47,11 @@ version.
   There is no catch-all rewrite — a miss is a real 404. A page in `App.tsx` but not in the registry
   ships nothing; add both. The legal docs publish in all three languages, because the extension
   repo carries a translation of each (`TERMS.pt-BR.md`, `PRIVACY.es.md`, …).
+- **`/docs` is authored here**, not synced: its text lives in the `docs.*` keys of all three
+  catalogs, and the anchor ids live in `DocsPage.tsx` so a link means the same thing in every
+  language. Its MCP commands repeat `chrome/docs/mcp.md` and the extension's Settings → MCP pane
+  (`chrome/src/entrypoints/options/McpPane.tsx`): change all three together. Every claim on it
+  comes from the extension repo's README or docs. Check it there before adding one.
 - **Brand:** DESIGN.md is the design system — read it before any visual work. Token scales live
   in `src/index.css` (`field-*` deep indigo grounds, `flare-*` comet-burn emerald = motion,
   `tel-*` amber = measurement, `star-*` text). Two Lights rule: only emerald and amber emit
