@@ -33,7 +33,8 @@ version.
 
 - Vite + React 19 + Tailwind 4 + bun. TypeScript strict. No component library — hand-built
   sections in `src/components/`, one per section (Hero, Features, Screenshots, Install, Privacy,
-  Footer, Nav, RunConsole, CometField, CometMark), plus the DocsPage and its CodeBlock.
+  Footer, Nav, RunConsole, CometField, CometMark), plus the DocsPage and its CodeBlock, and the
+  LanguageSwitcher that Nav (from `sm`) and Footer (phones) share.
 - **i18n:** en-US / pt-BR / es-ES, catalogs in `src/i18n/locales/*.ts` (typed off en-US). Add keys
   to all three catalogs in the same edit. No user-visible string is a literal.
 - **The URL decides the language, not the browser.** `/` is en-US, `/pt` and `/es` carry a

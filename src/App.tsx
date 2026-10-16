@@ -55,7 +55,7 @@ export function App({ route }: { route: string }) {
         <Install />
         <Privacy />
       </main>
-      <Footer />
+      <Footer route={route} />
     </>
   );
 }

@@ -4,8 +4,9 @@ import { useLanguage } from "../i18n";
 import { LINKS } from "../lib/links";
 import { CometMark } from "./CometMark";
 import { GithubMark } from "./GithubMark";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
-export function Footer() {
+export function Footer({ route }: { route: string }) {
   const { t } = useTranslation();
   const language = useLanguage();
 
@@ -88,6 +89,11 @@ export function Footer() {
               ))}
             </ul>
           </nav>
+        </div>
+
+        {/* The header has no room for the switcher on a phone, so it lives here. */}
+        <div className="mt-10 sm:hidden">
+          <LanguageSwitcher route={route} roomy />
         </div>
 
         <div className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-field-600/50 pt-6 font-mono text-xs text-star-500">
