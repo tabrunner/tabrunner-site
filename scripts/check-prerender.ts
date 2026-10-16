@@ -36,6 +36,7 @@ for (const language of SUPPORTED_LANGUAGES) {
     language,
     path: "/privacy",
   });
+  assert.deepEqual(splitLocalePath(localePath(language, "/docs")), { language, path: "/docs" });
 }
 
 // A trailing slash is the same page, and an unknown segment is an English path (a 404), never
@@ -50,6 +51,7 @@ assert.equal(pageFile("en-US", "/"), "index.html");
 assert.equal(pageFile("pt-BR", "/"), "pt.html");
 assert.equal(pageFile("en-US", "/privacy"), "privacy.html");
 assert.equal(pageFile("pt-BR", "/privacy"), "pt/privacy.html");
+assert.equal(pageFile("es-ES", "/docs"), "es/docs.html");
 
 assert.equal(ogLocale("pt-BR"), "pt_BR");
 
@@ -68,6 +70,12 @@ assert.deepEqual(
 for (const path of ["/privacy", "/terms"])
   assert.deepEqual(PUBLIC_PAGES.find((p) => p.path === path)?.languages, SUPPORTED_LANGUAGES);
 const privacy = PUBLIC_PAGES.find((p) => p.path === "/privacy")!;
+
+// The docs page is written in all three languages, so it publishes in all three — and takes its
+// head from the catalog, which the build fails on if a language lacks the key.
+const docs = PUBLIC_PAGES.find((p) => p.path === "/docs");
+assert.deepEqual(docs?.languages, SUPPORTED_LANGUAGES);
+assert.equal(docs?.titleKey, "docs.seo.title");
 
 // The sync pulls each language from its own file beside the English source of truth.
 assert.equal(legalSourceFile("terms", "en-US"), "TERMS.md");

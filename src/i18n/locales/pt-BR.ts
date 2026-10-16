@@ -16,6 +16,7 @@ export const ptBR: Locale = {
     features: "Recursos",
     install: "Instalar",
     privacy: "Privacidade",
+    docs: "Docs",
     download: "Instalar no Chrome",
     github: "GitHub",
     languageLabel: "Idioma",
@@ -172,6 +173,82 @@ export const ptBR: Locale = {
     diagramServerNone: "não existe",
     link: "Leia a política de privacidade completa",
   },
+  docs: {
+    seo: {
+      title: "Docs do TabRunner: conecte o Claude Code e resolva problemas comuns",
+      description:
+        "Conecte o Claude Code ao TabRunner por MCP e veja respostas sobre navegadores compatíveis, seus dados, aprovações e como parar uma execução.",
+    },
+    title: "Docs",
+    sub: "Conecte o Claude Code ao TabRunner e tire as dúvidas mais comuns.",
+    installLink: "Ainda não instalou? Comece aqui.",
+    contentsLabel: "Nesta página",
+    copy: "Copiar",
+    copied: "Copiado",
+    mcp: {
+      title: "Conectar o Claude Code (MCP)",
+      intro:
+        "O MCP deixa o Claude Code passar uma tarefa para o TabRunner. Ele faz o trabalho no seu navegador, com as suas contas logadas. Estes passos são para o Claude Code.",
+      enable:
+        "Ative a ponte. No TabRunner, abra Configurações → MCP e ative a opção. Ela vem desligada.",
+      fetch:
+        "Baixe o daemon. É um arquivo só, e o <bun>bun</bun> roda esse arquivo do jeito que está. Se você ainda não tem o bun, instale antes.",
+      add: "Adicione ao Claude Code. Com <code>--scope user</code>, ele funciona em qualquer pasta. Sem isso, o Claude Code adiciona só para a pasta atual.",
+      check:
+        "Confira a conexão. Peça ao Claude Code para rodar a ferramenta <code>health</code> do TabRunner. Ela diz se a extensão está conectada e o que corrigir, se não estiver.",
+      manual:
+        "Todas as ferramentas, configurações e o modo de controle direto estão no <manual>manual completo do MCP</manual>.",
+    },
+    remove: {
+      title: "Remover ou atualizar o servidor MCP",
+      remove: "Para remover, rode:",
+      file: "Isso só cancela o registro. O arquivo baixado continua no seu disco. Apague também, se quiser tirá-lo de lá:",
+      update:
+        "Para atualizar o daemon, rode de novo o comando de download do passo 2. Mais nada muda.",
+    },
+    faq: {
+      otherFolders: {
+        q: "O Claude Code não encontra o TabRunner em outra pasta",
+        a1: "Sem <code>--scope user</code>, o Claude Code guarda o servidor só para a pasta onde você o adicionou. Adicione de novo, para todas as pastas:",
+        a2: "A cópia só dessa pasta pode ficar. Para removê-la, rode isto dentro dessa pasta:",
+      },
+      notConnected: {
+        q: "A ferramenta health diz que a extensão não está conectada",
+        lead: "Confira, nesta ordem:",
+        items: [
+          "A ponte está ativada no TabRunner, em Configurações → MCP.",
+          "A porta é a mesma. Se você mudou a porta do daemon com <code>TABRUNNER_BRIDGE_PORT</code>, digite o mesmo número em Configurações → MCP. O padrão é 17836.",
+          "O navegador está aberto, com o TabRunner instalado e ativado.",
+          "O Claude Code lista o servidor. Rode <code>claude mcp list</code>. Se o tabrunner não aparecer, adicione de novo e abra uma nova sessão.",
+        ],
+        tail: "O daemon inicia junto com o Claude Code, então não há nada para deixar rodando.",
+      },
+      browsers: {
+        q: "Em quais navegadores ele funciona?",
+        a: "Navegadores Chromium de desktop: Chrome, Brave, Edge, Arc, Opera e Vivaldi. Firefox e Safari não têm a API de entrada confiável, então o TabRunner não consegue clicar e digitar de verdade neles.",
+      },
+      account: {
+        q: "Preciso de uma conta no TabRunner?",
+        a: "Não. Não existe conta no TabRunner nem plano gratuito. Você traz o modelo: entre com um plano do Claude, do ChatGPT ou do Kimi que você já paga, ou cole uma chave de API. Qualquer endpoint compatível com o formato da OpenAI ou da Anthropic também funciona.",
+      },
+      data: {
+        q: "Para onde vão os meus dados?",
+        a: "Para dois lugares: o site em que o agente está trabalhando e o provedor de IA que você configurou. Sua chave de API ou o seu login vai direto da extensão para esse provedor. Não existe servidor do TabRunner, nem telemetria, nem intermediário. As configurações e o histórico das conversas ficam no armazenamento do navegador, no seu dispositivo. Um servidor MCP ou um webhook só recebe dados se você adicionar. A <privacy>política de privacidade</privacy> tem os detalhes.",
+      },
+      confirm: {
+        q: "Ele paga, envia ou apaga sem perguntar?",
+        a: "Não. Você aprova o plano antes de qualquer coisa, e ações que pagam, enviam ou apagam voltam para a sua confirmação. Uma exceção: quando um cliente MCP clica nas páginas por conta própria (controle direto), é o cliente que precisa perguntar a você antes. A checagem do próprio TabRunner não entra nesse caminho.",
+      },
+      stop: {
+        q: "Como paro uma execução?",
+        a: "Clique em Parar no painel lateral. Fechar a aba que ele está controlando também encerra a execução. Num cliente MCP, chame a ferramenta <code>stop</code>.",
+      },
+      update: {
+        q: "Como atualizo a extensão?",
+        a: "Pela Chrome Web Store, as atualizações chegam sozinhas. Se você instalou o ZIP, extraia cada versão nova por cima da mesma pasta e clique no ícone de recarregar em <code>chrome://extensions</code>. Nunca remova a extensão para reinstalar. O Chrome apaga o armazenamento dela, e seus provedores, logins e conversas vão junto.",
+      },
+    },
+  },
   legal: {
     back: "Voltar para tabrunner.app",
     source: "Fonte oficial:",
@@ -188,7 +265,7 @@ export const ptBR: Locale = {
     issues: "Issues",
     privacyLink: "Política de privacidade",
     termsLink: "Termos de uso",
-    mcpDocs: "Docs do MCP",
+    docs: "Docs",
     copyright: "© 2026 Gus",
   },
 };

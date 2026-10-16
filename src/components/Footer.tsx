@@ -21,7 +21,7 @@ export function Footer() {
     { label: t("footer.issues"), href: LINKS.issues },
     { label: t("footer.privacyLink"), href: localePath(language, LINKS.privacy), internal: true },
     { label: t("footer.termsLink"), href: localePath(language, LINKS.terms), internal: true },
-    { label: t("footer.mcpDocs"), href: LINKS.mcpDocs },
+    { label: t("footer.docs"), href: localePath(language, LINKS.docs), internal: true },
   ];
 
   return (
