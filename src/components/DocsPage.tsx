@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { localePath } from "../config/locale";
+import { MCP, MCP_CLIENT_CONFIG } from "../config/mcp";
 import { useLanguage } from "../i18n";
 import { LINKS } from "../lib/links";
 import { CodeBlock } from "./CodeBlock";
@@ -15,16 +16,12 @@ import { Nav } from "./Nav";
  * all three together.
  */
 
-/** Commands are data: never translated, and exactly what the extension's own pane shows. */
-const FETCH = `curl -fsSL ${LINKS.mcpDaemon} -o ~/.tabrunner-mcp.js`;
-const ADD = "claude mcp add --scope user tabrunner -- bun ~/.tabrunner-mcp.js";
-const REMOVE = "claude mcp remove --scope user tabrunner";
-const REMOVE_FOLDER_COPY = "claude mcp remove --scope local tabrunner";
-const DELETE_FILE = "rm ~/.tabrunner-mcp.js";
-
 /** Ids live here, not in the catalog: an anchor must mean the same thing in every language. */
 const TOPICS = [
   { id: "mcp", title: "docs.mcp.title" },
+  { id: "examples", title: "docs.examples.title" },
+  { id: "access", title: "docs.access.title" },
+  { id: "developers", title: "docs.developers.title" },
   { id: "remove", title: "docs.remove.title" },
   { id: "other-folders", title: "docs.faq.otherFolders.q" },
   { id: "not-connected", title: "docs.faq.notConnected.q" },
@@ -132,33 +129,78 @@ export function DocsPage() {
               <P spacing="mt-0">{t("docs.mcp.enable")}</P>
             </Step>
             <Step n={2}>
-              <P spacing="mt-0">{rich("docs.mcp.fetch")}</P>
-              <CodeBlock code={FETCH} />
+              <P spacing="mt-0">{rich("docs.mcp.install")}</P>
+              <CodeBlock code={MCP.plugin} />
+              <P spacing="mt-6">{rich("docs.mcp.add")}</P>
+              <CodeBlock code={MCP.add} />
             </Step>
             <Step n={3}>
-              <P spacing="mt-0">{rich("docs.mcp.add")}</P>
-              <CodeBlock code={ADD} />
-            </Step>
-            <Step n={4}>
               <P spacing="mt-0">{rich("docs.mcp.check")}</P>
             </Step>
           </ol>
           <P spacing="mt-8">{rich("docs.mcp.manual")}</P>
         </Topic>
 
+        <Topic id="examples">
+          <P>{t("docs.examples.intro")}</P>
+          <ul className="mt-6 space-y-5">
+            {[0, 1, 2].map((index) => (
+              <li key={index}>
+                <CodeBlock code={t(`docs.examples.prompts.${index}`)} />
+              </li>
+            ))}
+          </ul>
+          <P spacing="mt-6">{rich("docs.examples.follow")}</P>
+        </Topic>
+
+        <Topic id="access">
+          <P>{t("docs.access.browser")}</P>
+          <P>{rich("docs.access.auth")}</P>
+          <P>{t("docs.access.provider")}</P>
+          <P>{rich("docs.access.direct")}</P>
+        </Topic>
+
+        <Topic id="developers">
+          <P>{t("docs.developers.example")}</P>
+          <CodeBlock code={`run(${JSON.stringify(t("docs.examples.prompts.0"))})`} />
+          <P>{rich("docs.developers.status")}</P>
+          <P>{t("docs.developers.intro")}</P>
+          <CodeBlock code={MCP_CLIENT_CONFIG} />
+          <P>{t("docs.developers.reconnect")}</P>
+          <h3 className="mt-8 font-semibold text-star-100">{t("docs.developers.reference")}</h3>
+          <ul className="mt-3 space-y-3">
+            {(
+              [
+                ["/.well-known/mcp.json", "discovery"],
+                ["/llms.txt", "index"],
+                ["/llms-full.txt", "full"],
+              ] as const
+            ).map(([href, key]) => (
+              <li key={href}>
+                <a href={href} className={LINK_CLASS}>
+                  {t(`docs.developers.${key}`)}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </Topic>
+
         <Topic id="remove">
-          <P>{t("docs.remove.remove")}</P>
-          <CodeBlock code={REMOVE} />
-          <P spacing="mt-6">{t("docs.remove.file")}</P>
-          <CodeBlock code={DELETE_FILE} />
-          <P spacing="mt-6">{t("docs.remove.update")}</P>
+          <P>{rich("docs.remove.disable")}</P>
+          <P spacing="mt-6">{t("docs.remove.plugin")}</P>
+          <CodeBlock code={MCP.removePlugin} />
+          <P spacing="mt-6">{rich("docs.remove.remove")}</P>
+          <CodeBlock code={MCP.remove} />
+          <P spacing="mt-6">{rich("docs.remove.file")}</P>
+          <CodeBlock code={MCP.deleteFile} />
+          <P spacing="mt-6">{rich("docs.remove.update")}</P>
         </Topic>
 
         <Topic id="other-folders">
           <P>{rich("docs.faq.otherFolders.a1")}</P>
-          <CodeBlock code={ADD} />
+          <CodeBlock code={MCP.add} />
           <P spacing="mt-6">{t("docs.faq.otherFolders.a2")}</P>
-          <CodeBlock code={REMOVE_FOLDER_COPY} />
+          <CodeBlock code={MCP.removeLocal} />
         </Topic>
 
         <Topic id="not-connected">
