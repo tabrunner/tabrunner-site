@@ -22,6 +22,7 @@ import { type LegalDoc, PUBLIC_PAGES, SHELL_ROUTE } from "../src/config/publicPa
 import { enUS } from "../src/i18n/locales/en-US";
 import { ptBR } from "../src/i18n/locales/pt-BR";
 import { esES } from "../src/i18n/locales/es-ES";
+import { discoveryFiles, softwareJsonLd } from "../src/config/discovery";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..");
@@ -177,6 +178,13 @@ for (const page of PUBLIC_PAGES) {
         : resolve(language, page.descriptionKey ?? "seo.description"),
       body: { route: localePath(language, page.path), html: rendered },
     });
+    // The software is described on the pages about it: the front door and the guide.
+    if (page.path === "/" || page.path === "/docs") {
+      out.html = out.html.replace(
+        "</head>",
+        `${softwareJsonLd(origin, language, CATALOGS[language])}\n</head>`,
+      );
+    }
     assertRendered(out.file, out.html, language);
     written.push(out);
   }
@@ -218,6 +226,11 @@ for (const { file, html } of written) {
 }
 
 writeFileSync(path.join(dist, "sitemap.xml"), buildSitemap(origin));
+for (const [file, content] of Object.entries(discoveryFiles(origin))) {
+  const target = path.join(dist, file);
+  mkdirSync(path.dirname(target), { recursive: true });
+  writeFileSync(target, content);
+}
 writeFileSync(
   path.join(dist, "robots.txt"),
   `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`,

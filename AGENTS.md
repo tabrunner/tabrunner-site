@@ -50,9 +50,18 @@ version.
   repo carries a translation of each (`TERMS.pt-BR.md`, `PRIVACY.es.md`, …).
 - **`/docs` is authored here**, not synced: its text lives in the `docs.*` keys of all three
   catalogs, and the anchor ids live in `DocsPage.tsx` so a link means the same thing in every
-  language. Its MCP commands repeat `chrome/docs/mcp.md` and the extension's Settings → MCP pane
-  (`chrome/src/entrypoints/options/McpPane.tsx`): change all three together. Every claim on it
-  comes from the extension repo's README or docs. Check it there before adding one.
+  language. Its MCP commands live in `src/config/mcp.ts` and repeat `chrome/docs/mcp.md`, the
+  extension's Settings → MCP pane (`chrome/src/entrypoints/options/McpPane.tsx`) and the package in
+  `chrome/daemon/server.json`: change all four together. Every claim on it comes from the extension
+  repo's README or docs. Check it there before adding one.
+- **The MCP server is local.** The client starts `bunx tabrunner-mcp@latest` on the reader's
+  computer (stdio), and a loopback broker with a private token joins it to the extension. TabRunner
+  has no public MCP URL and no public API, so the site publishes no `WebAPI` data and no OAuth
+  metadata, and `/.well-known/mcp.json` must keep `transport: "stdio"` and carry no `url`.
+  `src/config/discovery.ts` writes that file, `/llms.txt`, `/llms-full.txt` (English, from the same
+  `docs.*` catalog the guide renders) and the `SoftwareApplication` JSON-LD baked into `/` and
+  `/docs`. They come from `@gusnips/vite` (`mcpDiscoveryJson`, `llmsTxt`, `jsonLd`), and
+  `scripts/prerender.ts` writes them to `dist/`. `bun run check` holds the stdio rule.
 - **Brand:** DESIGN.md is the design system — read it before any visual work. Token scales live
   in `src/index.css` (`field-*` deep indigo grounds, `flare-*` comet-burn emerald = motion,
   `tel-*` amber = measurement, `star-*` text). Two Lights rule: only emerald and amber emit
