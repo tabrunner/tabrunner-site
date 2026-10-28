@@ -14,6 +14,9 @@ import {
   splitLocalePath,
   SUPPORTED_LANGUAGES,
 } from "../src/config/locale";
+import { discoveryFiles, softwareJsonLd } from "../src/config/discovery";
+import { MCP } from "../src/config/mcp";
+import { enUS } from "../src/i18n/locales/en-US";
 import { buildSitemap, pageFile, prerenderPage } from "../src/config/prerender";
 import {
   legalLinkTarget,
@@ -161,5 +164,33 @@ assert.ok(shell.includes('<meta name="robots" content="noindex" />'));
 assert.ok(!shell.includes('rel="canonical"'));
 assert.ok(!shell.includes("og:url"));
 assert.ok(shell.includes(`data-prerendered-route="*"`), "a shell must not claim a real route");
+
+// The MCP server is a local process the client starts. Its manifest must say stdio, with the same
+// command the guide shows, and must never carry a URL: TabRunner has no public MCP endpoint.
+const files = discoveryFiles("https://tabrunner.app");
+const manifest = JSON.parse(files[".well-known/mcp.json"]!) as {
+  servers: { transport: string; command?: string; args?: string[]; url?: string }[];
+};
+assert.equal(manifest.servers.length, 1);
+const server = manifest.servers[0]!;
+assert.equal(server.transport, "stdio");
+assert.equal(server.url, undefined, "a local stdio server has no URL");
+assert.deepEqual([server.command, ...(server.args ?? [])], [MCP.command, MCP.package]);
+
+// No catalog tag may leak into a plain-text file, and none of them may carry an em dash.
+for (const [name, text] of Object.entries(files)) {
+  assert.ok(!/<\/?(code|bun|manual|privacy)>/.test(text), `${name} still has a catalog tag`);
+  assert.ok(!text.includes("\u2014"), `${name} has an em dash`);
+}
+assert.ok(
+  files["llms-full.txt"]!.includes(MCP.plugin),
+  "the full guide must show the install command",
+);
+
+// Structured data survives a round trip and cannot close its own script tag.
+const ld = softwareJsonLd("https://tabrunner.app", "pt-BR", enUS);
+assert.equal(ld.match(/<\/script/gi)?.length, 1, "the JSON-LD may only close its own script");
+const body = />([\s\S]*)<\/script>/.exec(ld)![1]!;
+assert.equal(JSON.parse(body)["@type"], "SoftwareApplication");
 
 console.log("· prerender check ok");

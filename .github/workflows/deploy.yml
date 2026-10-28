@@ -161,7 +161,7 @@ jobs:
           # catch-all gone they cannot be answered by the shell any more — which is exactly why it
           # is worth asserting: a rewrite added back by a future hand would serve HTML here and
           # nothing else in this job would notice.
-          for file in /robots.txt /sitemap.xml; do
+          for file in /robots.txt /sitemap.xml /llms.txt /llms-full.txt /.well-known/mcp.json; do
             probe "$ORIGIN$file" 200 > /dev/null
             type=$(grep -i '^content-type:' "$head" || true)
             type=${type%$'\r'}
@@ -171,6 +171,15 @@ jobs:
               exit 1
             fi
           done
+
+          # The MCP manifest has to be JSON that says stdio, and has to carry no address: TabRunner has
+          # no public MCP endpoint, and a server URL here would send clients to a place that is not there.
+          probe "$ORIGIN/.well-known/mcp.json" 200 > /dev/null
+          manifest=$(cat "$body")
+          if [[ "$manifest" != *'"transport": "stdio"'* || "$manifest" == *'"url"'* ]]; then
+            echo "::error::/.well-known/mcp.json is not the local stdio manifest"
+            exit 1
+          fi
 
           probe "$ORIGIN/robots.txt" 200 > /dev/null
           robots=$(cat "$body")

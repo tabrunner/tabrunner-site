@@ -175,48 +175,88 @@ export const ptBR: Locale = {
   },
   docs: {
     seo: {
-      title: "Docs do TabRunner: conecte o Claude Code e resolva problemas comuns",
+      title: "Docs do TabRunner: conecte sua IA ao navegador",
       description:
-        "Conecte o Claude Code ao TabRunner por MCP e veja respostas sobre navegadores compatíveis, seus dados, aprovações e como parar uma execução.",
+        "Conecte o Claude Code ou outro cliente MCP ao seu navegador. Experimente tarefas, veja a que o cliente tem acesso e saiba como desconectar.",
     },
-    title: "Docs",
-    sub: "Conecte o Claude Code ao TabRunner e tire as dúvidas mais comuns.",
+    title: "Use o TabRunner pela sua IA",
+    sub: "Peça à sua IA uma tarefa nos sites em que você já está logado. O TabRunner usa o seu navegador, não um navegador separado na nuvem.",
     installLink: "Ainda não instalou? Comece aqui.",
     contentsLabel: "Nesta página",
     copy: "Copiar",
     copied: "Copiado",
+    copyFailed: "O navegador bloqueou a cópia. Selecione o texto e pressione Ctrl+C ou Cmd+C.",
     mcp: {
       title: "Conectar o Claude Code (MCP)",
       intro:
-        "O MCP deixa o Claude Code passar uma tarefa para o TabRunner. Ele faz o trabalho no seu navegador, com as suas contas logadas. Estes passos são para o Claude Code.",
+        "MCP é a conexão que permite à sua IA usar as ferramentas do TabRunner. Ela roda no seu computador. Não há endereço de servidor público, conta TabRunner ou login por OAuth.",
       enable:
-        "Ative a ponte. No TabRunner, abra Configurações → MCP e ative a opção. Ela vem desligada.",
-      fetch:
-        "Baixe o daemon. É um arquivo só, e o <bun>bun</bun> roda esse arquivo do jeito que está. Se você ainda não tem o bun, instale antes.",
-      add: "Adicione ao Claude Code. Com <code>--scope user</code>, ele funciona em qualquer pasta. Sem isso, o Claude Code adiciona só para a pasta atual.",
+        "Instale o TabRunner e abra Configurações → MCP. Ative a ponte, a conexão local com a sua IA. Ela vem desligada. Adicione um provedor de IA no TabRunner se quiser que ele execute tarefas por você.",
+      install:
+        "Instale o <bun>Bun</bun>, que executa o processo MCP local. Depois, rode o comando abaixo no terminal. O plugin adiciona o servidor MCP e as instruções para usá-lo.",
+      add: "Se não quiser o plugin, cadastre só o servidor MCP com este comando. Com <code>--scope user</code>, ele fica disponível em todos os projetos. Escolha apenas uma forma para não duplicar as ferramentas.",
       check:
-        "Confira a conexão. Peça ao Claude Code para rodar a ferramenta <code>health</code> do TabRunner. Ela diz se a extensão está conectada e o que corrigir, se não estiver.",
+        "Abra uma nova sessão do Claude Code e peça para chamar <code>health</code>. A ferramenta verifica a conexão e as configurações salvas do provedor, não se o provedor vai aceitar a próxima chamada.",
       manual:
-        "Todas as ferramentas, configurações e o modo de controle direto estão no <manual>manual completo do MCP</manual>.",
+        "Usa Codex, uma versão mais antiga do Claude Code ou um arquivo do daemon baixado? O <manual>manual completo do MCP</manual> tem esses passos e todas as ferramentas.",
+    },
+    examples: {
+      title: "Experimente uma tarefa",
+      intro:
+        "Entre primeiro nos sites que vai usar. Depois, peça à sua IA conectada para usar o TabRunner. Estes são exemplos de pedidos, não ações que esta página executa.",
+      prompts: [
+        "Encontre a nota fiscal mais recente no meu e-mail e me diga o valor a pagar.",
+        "Compare o frete nas abas de checkout abertas. Não finalize nenhuma compra.",
+        "Prepare uma resposta para a última mensagem de suporte. Não envie.",
+      ],
+      follow:
+        "A IA chama <code>get_status</code> para acompanhar a tarefa. Se o TabRunner fizer uma pergunta, a IA deve mostrá-la a você e devolver a sua resposta. Ela não deve aprovar por você.",
+    },
+    access: {
+      title: "A que a conexão dá acesso",
+      browser:
+        "Um cliente conectado pode ler páginas e agir no seu navegador logado. Tarefas, leituras das páginas e capturas de tela podem passar para esse cliente. As abas compartilham as contas do perfil do navegador, mesmo quando clientes diferentes usam abas diferentes. Conecte só clientes em que você confia para dar esse acesso.",
+      auth: "Você não precisa criar nem colar uma chave de API do TabRunner. Um processo local conecta o cliente à extensão. Ele usa um token de acesso salvo em um arquivo privado em <code>~/.tabrunner/mcp</code>. Programas rodando com o seu usuário do sistema podem ler esse arquivo. Não compartilhe o arquivo nem exponha o processo local à rede.",
+      provider:
+        "Quando você delega uma tarefa, a extensão usa o provedor de IA escolhido por você, com os custos desse provedor. As ferramentas de controle direto não precisam de um provedor no TabRunner; o cliente MCP usa o próprio modelo. As credenciais do provedor ficam entre a extensão e o provedor.",
+      direct:
+        "Tarefas delegadas seguem as regras de aprovação do TabRunner. As ferramentas diretas <code>browser_*</code> não passam pelo modelo dele. Por isso, o cliente que as chama deve pedir sua autorização antes de pagar, enviar, excluir ou enviar um formulário.",
+    },
+    developers: {
+      title: "Para quem desenvolve",
+      intro:
+        "Use este comando e argumento em um cliente que aceite servidores MCP locais por stdio, a entrada e a saída padrão do processo. O Bun e a extensão TabRunner precisam estar no mesmo computador. Um cliente que só aceita endereços remotos não consegue se conectar dessa forma.",
+      example: "Uma chamada inicia a tarefa e devolve o ID da execução:",
+      status:
+        "Chame <code>get_status()</code> até a tarefa terminar, falhar ou fazer uma pergunta. Por padrão, a chamada espera algo mudar. Não consulte em um temporizador. Use <code>answer(text)</code> só depois da resposta da pessoa e <code>stop()</code> para parar a tarefa atual deste cliente.",
+      reconnect:
+        "Se uma chamada exceder o tempo de espera, a ação no navegador pode já ter acontecido. Restabeleça a conexão e confira o estado ou a página antes de tentar de novo. As ações no navegador não são repetidas automaticamente.",
+      reference: "Referência para programas",
+      discovery: "Dados da instalação MCP local (JSON)",
+      index: "Índice da documentação (llms.txt)",
+      full: "Guia completo da conexão (llms-full.txt)",
     },
     remove: {
-      title: "Remover ou atualizar o servidor MCP",
-      remove: "Para remover, rode:",
-      file: "Isso só cancela o registro. O arquivo baixado continua no seu disco. Apague também, se quiser tirá-lo de lá:",
+      title: "Desconectar ou atualizar",
+      disable:
+        "Para desconectar todos os clientes MCP deste navegador, desative a ponte em Configurações → MCP do TabRunner. Para parar só a tarefa atual, peça primeiro ao cliente dela para chamar <code>stop</code>. As tarefas dos outros clientes são separadas.",
+      plugin: "Se instalou o plugin, remova com:",
+      remove: "Se cadastrou o servidor à mão com <code>--scope user</code>, remova o cadastro com:",
+      file: "Se usou o download antigo de arquivo único, <code>~/.tabrunner-mcp.js</code> continua no disco depois de remover o cadastro. Você pode apagar o arquivo separadamente:",
       update:
-        "Para atualizar o daemon, rode de novo o comando de download do passo 2. Mais nada muda.",
+        "Atualize o plugin pelo gerenciador de plugins do seu cliente. Na configuração manual por npm, <code>@latest</code> procura uma versão nova ao iniciar. Atualize todos os clientes que compartilham a ponte e, se as versões forem diferentes, feche e abra os clientes. Para um arquivo baixado, use novamente o comando de download do manual completo.",
     },
     faq: {
       otherFolders: {
         q: "O Claude Code não encontra o TabRunner em outra pasta",
         a1: "Sem <code>--scope user</code>, o Claude Code guarda o servidor só para a pasta onde você o adicionou. Adicione de novo, para todas as pastas:",
-        a2: "A cópia só dessa pasta pode ficar. Para removê-la, rode isto dentro dessa pasta:",
+        a2: "Se também houver um cadastro só para uma pasta, remova dentro dela para não duplicar as ferramentas:",
       },
       notConnected: {
         q: "A ferramenta health diz que a extensão não está conectada",
         lead: "Confira, nesta ordem:",
         items: [
-          "A ponte está ativada no TabRunner, em Configurações → MCP.",
+          "A ponte está ativada no TabRunner, em Configurações → MCP. Abra o painel lateral uma vez para ativar a extensão e tente health de novo após cerca de 30 segundos.",
           "A porta é a mesma. Se você mudou a porta do daemon com <code>TABRUNNER_BRIDGE_PORT</code>, digite o mesmo número em Configurações → MCP. O padrão é 17836.",
           "O navegador está aberto, com o TabRunner instalado e ativado.",
           "O Claude Code lista o servidor. Rode <code>claude mcp list</code>. Se o tabrunner não aparecer, adicione de novo e abra uma nova sessão.",
@@ -233,11 +273,11 @@ export const ptBR: Locale = {
       },
       data: {
         q: "Para onde vão os meus dados?",
-        a: "Para dois lugares: o site em que o agente está trabalhando e o provedor de IA que você configurou. Sua chave de API ou o seu login vai direto da extensão para esse provedor. Não existe servidor do TabRunner, nem telemetria, nem intermediário. As configurações e o histórico das conversas ficam no armazenamento do navegador, no seu dispositivo. Um servidor MCP ou um webhook só recebe dados se você adicionar. A <privacy>política de privacidade</privacy> tem os detalhes.",
+        a: "O site em que o TabRunner está trabalhando e o provedor de IA escolhido recebem os dados necessários para a tarefa. Seu login ou sua chave de API vai direto da extensão para o provedor. Um cliente MCP conectado também recebe tarefas, leituras das páginas e capturas de tela. As configurações e o histórico ficam no armazenamento do navegador. Não há servidor do TabRunner na nuvem, analytics ou intermediário. Servidores MCP remotos e webhooks só recebem dados se você adicionar. A <privacy>política de privacidade</privacy> tem os detalhes.",
       },
       confirm: {
         q: "Ele paga, envia ou apaga sem perguntar?",
-        a: "Não. Você aprova o plano antes de qualquer coisa, e ações que pagam, enviam ou apagam voltam para a sua confirmação. Uma exceção: quando um cliente MCP clica nas páginas por conta própria (controle direto), é o cliente que precisa perguntar a você antes. A checagem do próprio TabRunner não entra nesse caminho.",
+        a: "Quando você delega uma tarefa, as regras do TabRunner orientam o modelo a perguntar antes de pagar, enviar, excluir ou enviar um formulário. O cliente deve mostrar cada pergunta e devolver a sua resposta, nunca aprovar por você. As ferramentas de controle direto não passam por esse modelo. Nesse caso, o próprio cliente deve pedir sua autorização. Conecte só clientes em que você confia e confira o trabalho deles.",
       },
       stop: {
         q: "Como paro uma execução?",

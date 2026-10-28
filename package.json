@@ -29,6 +29,7 @@
     "@fontsource-variable/figtree": "^5.2.5",
     "@fontsource-variable/jetbrains-mono": "^5.2.5",
     "@fontsource-variable/unbounded": "^5.2.5",
+    "@gusnips/vite": "^0.8.44",
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

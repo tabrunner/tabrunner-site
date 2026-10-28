@@ -175,48 +175,89 @@ export const enUS = {
   },
   docs: {
     seo: {
-      title: "TabRunner docs: connect Claude Code and fix common problems",
+      title: "TabRunner docs: connect your AI client to your browser",
       description:
-        "Connect Claude Code to TabRunner over MCP, then find answers on supported browsers, your data, approvals and stopping a run.",
+        "Connect Claude Code or another MCP client to your browser. Try example tasks, check what the client can access and learn how to disconnect it.",
     },
-    title: "Docs",
-    sub: "Connect Claude Code to TabRunner, and get quick answers to the questions we hear most.",
+    title: "Use TabRunner from your AI client",
+    sub: "Give your AI client a task on the sites you're already signed into. TabRunner works in your own browser, not a separate browser in the cloud.",
     installLink: "Haven't installed it yet? Start here.",
     contentsLabel: "On this page",
     copy: "Copy",
     copied: "Copied",
+    copyFailed: "Your browser blocked copying. Select the text and press Ctrl+C or Cmd+C.",
     mcp: {
       title: "Connect Claude Code (MCP)",
       intro:
-        "MCP lets Claude Code give TabRunner a task. TabRunner does the work in your browser, with your logins. These steps are for Claude Code.",
+        "MCP is the connection that lets your AI client use TabRunner's tools. It runs on your computer. There is no public TabRunner server URL, account or OAuth sign-in.",
       enable:
-        "Turn on the bridge. In TabRunner, open Settings → MCP and switch it on. It stays off until you do.",
-      fetch:
-        "Download the daemon. It's one file, and <bun>bun</bun> runs it as it is, so install bun first if you don't have it.",
-      add: "Add it to Claude Code. With <code>--scope user</code> it works in every folder. Without it, Claude Code adds it to the current folder only.",
+        "Install TabRunner and open Settings → MCP. Turn on the bridge, the local connection to your AI client. It is off by default. Add an AI provider in TabRunner if you want it to carry out tasks for you.",
+      install:
+        "Install <bun>Bun</bun>, which runs the local MCP process. Then run this in your terminal. The plugin adds the MCP server and instructions for using it.",
+      add: "Without the plugin, register the MCP server with this command instead. <code>--scope user</code> makes it available in every project. Choose one method, so the tools do not appear twice.",
       check:
-        "Check the link. Ask Claude Code to run TabRunner's <code>health</code> tool. It says whether the extension is connected, and what to fix if not.",
+        "Start a new Claude Code session and ask it to call <code>health</code>. This checks the connection and saved provider settings, not whether the provider will accept your next request.",
       manual:
-        "Every tool, setting and the direct-control mode are in the <manual>full MCP manual</manual>.",
+        "Using Codex, an older Claude Code release or a downloaded daemon file? The <manual>full MCP manual</manual> has those setup steps and every tool.",
+    },
+    examples: {
+      title: "Try a task",
+      intro:
+        "Sign into the sites you need first. Then ask your connected AI client to use TabRunner. These are example prompts, not actions this page runs.",
+      prompts: [
+        "Find the latest invoice in my email and tell me the amount due.",
+        "Compare shipping costs in my open checkout tabs. Do not place an order.",
+        "Draft a reply to the latest support message. Do not send it.",
+      ],
+      follow:
+        "The client calls <code>get_status</code> to follow the task. If TabRunner asks a question, the client must show it to you and pass back your answer. It must not approve on your behalf.",
+    },
+    access: {
+      title: "What the connection can access",
+      browser:
+        "A connected client can read pages and act in your signed-in browser. Tasks, page snapshots and screenshots can pass to that client. Tabs share the browser profile's accounts, even when different clients use different tabs. Only connect clients you trust with that access.",
+      auth: "There is no TabRunner API key to create or paste. A local process connects the client to the extension. It uses an access token saved in a private file under <code>~/.tabrunner/mcp</code>. Programs running as your operating-system user can read that file. Do not share it or expose the local process to the network.",
+      provider:
+        "When you delegate a task, the extension uses your chosen AI provider and that provider's charges apply. Direct browser tools do not need a provider configured in TabRunner; the MCP client supplies its own model. Provider credentials stay between the extension and the provider.",
+      direct:
+        "Delegated tasks use TabRunner's approval rules. Direct <code>browser_*</code> tools bypass its model, so the calling client must ask you before paying, sending, deleting or submitting anything.",
+    },
+    developers: {
+      title: "For developers",
+      intro:
+        "Use this command and argument in a client that supports local MCP servers over stdio, the process's standard input and output. It needs Bun and the TabRunner extension on the same computer. A client that accepts only remote URLs cannot connect this way.",
+      example: "One call starts a task and returns a run id:",
+      status:
+        "Call <code>get_status()</code> until the task finishes, fails or asks a question. It waits for a change by default, so do not poll on a timer. Use <code>answer(text)</code> only after the user answers, and <code>stop()</code> to stop this client's current task.",
+      reconnect:
+        "If a call times out, the browser action may already have happened. Restore the connection and inspect the status or page before trying again. Browser actions are not replayed automatically.",
+      reference: "Machine-readable reference",
+      discovery: "Local MCP install details (JSON)",
+      index: "Documentation index (llms.txt)",
+      full: "Full connection guide (llms-full.txt)",
     },
     remove: {
-      title: "Remove or update the MCP server",
-      remove: "To remove it, run this:",
-      file: "That unregisters it. The downloaded file stays on your disk. Delete it too if you want it gone:",
+      title: "Disconnect or update",
+      disable:
+        "To disconnect every MCP client from this browser, turn off the bridge in TabRunner's Settings → MCP. To stop only the current task, ask its client to call <code>stop</code> first. Other clients' tasks are separate.",
+      plugin: "If you installed the plugin, uninstall it with:",
+      remove:
+        "If you registered the server by hand with <code>--scope user</code>, remove that registration with:",
+      file: "If you used the older single-file download, <code>~/.tabrunner-mcp.js</code> stays on disk after removing the registration. You can delete it separately:",
       update:
-        "To update the daemon, run the download command from step 2 again. Nothing else changes.",
+        "Update the plugin through your client's plugin manager. For the manual npm setup, <code>@latest</code> checks for a new package when it starts. Update all clients sharing the bridge, then close and reopen them if their versions differ. For a downloaded file, use the download command in the full manual again.",
     },
     faq: {
       otherFolders: {
         q: "Claude Code can't find TabRunner in another folder",
         a1: "Without <code>--scope user</code>, Claude Code keeps the server for the one folder where you added it. Add it again, for every folder:",
-        a2: "The folder-only copy can stay. To remove it, run this in that folder:",
+        a2: "If you also have a folder-only copy, remove it from that folder so the tools appear only once:",
       },
       notConnected: {
         q: "The health tool says the extension isn't connected",
         lead: "Check these, in order:",
         items: [
-          "The bridge is on in TabRunner, under Settings → MCP.",
+          "The bridge is on in TabRunner, under Settings → MCP. Open the side panel once to wake it, then try health again after about 30 seconds.",
           "The port matches. If you changed the daemon's port with <code>TABRUNNER_BRIDGE_PORT</code>, enter the same number in Settings → MCP. The default is 17836.",
           "Your browser is open, with TabRunner installed and on.",
           "Claude Code lists the server. Run <code>claude mcp list</code>. If tabrunner is missing, add it again, then start a new session.",
@@ -233,11 +274,11 @@ export const enUS = {
       },
       data: {
         q: "Where does my data go?",
-        a: "To two places: the site the agent is working on, and the AI provider you set up. Your API key or sign-in goes straight from the extension to that provider. There is no TabRunner server, no analytics and no relay. Your settings and chat history stay in your browser's storage, on your device. An MCP server or a webhook gets data only if you add one. The <privacy>privacy policy</privacy> has the details.",
+        a: "The site TabRunner is working on and your chosen AI provider receive the data needed for the task. Your provider sign-in or API key goes straight from the extension to that provider. A connected MCP client also receives tasks, page snapshots and screenshots. Settings and chat history stay in your browser's storage. There is no TabRunner cloud server, analytics or relay. Remote MCP servers and webhooks receive data only if you add them. The <privacy>privacy policy</privacy> has the details.",
       },
       confirm: {
         q: "Will it pay, send or delete without asking?",
-        a: "No. You approve the plan before anything happens, and actions that pay, send or delete come back to you for confirmation. One exception to know: when an MCP client clicks through pages itself (direct control), the client has to ask you first. TabRunner's own check isn't in that loop.",
+        a: "When you delegate a task, TabRunner's rules tell its model to ask before paying, sending, deleting or submitting. The client must show you each question and return your answer, not approve for you. Direct browser tools bypass that model, so the calling client must ask for your permission itself. Connect only clients you trust and review their work.",
       },
       stop: {
         q: "How do I stop a run?",
