@@ -31,8 +31,8 @@ version.
 
 ## Conventions
 
-- Vite + React 19 + Tailwind 4 + bun. TypeScript strict. No component library — hand-built
-  sections in `src/components/`, one per section (Hero, Features, Screenshots, Install, Privacy,
+- Vite + React 19 + Tailwind 4 + Bun 1.4.4. TypeScript 7, strict mode. No component library;
+  hand-built sections in `src/components/`, one per section (Hero, Features, Screenshots, Install, Privacy,
   Footer, Nav, RunConsole, CometField, CometMark), plus the DocsPage and its CodeBlock, and the
   LanguageSwitcher that Nav (from `sm`) and Footer (phones) share.
 - **i18n:** en-US / pt-BR / es-ES, catalogs in `src/i18n/locales/*.ts` (typed off en-US). Add keys
