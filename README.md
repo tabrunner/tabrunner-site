@@ -1,8 +1,9 @@
 # tabrunner.app
 
-Marketing and download site for [TabRunner](https://github.com/tabrunner/tabrunner), a Chromium
-extension that lets an LLM drive your real browser. Static site, deployed on its own cadence,
-independent of the extension repo.
+Older standalone source for the marketing and download site for
+[TabRunner](https://github.com/tabrunner/tabrunner), a Chromium extension that lets an LLM drive
+your real browser. The current site lives in that repo's `apps/site` workspace, which owns normal
+publishing.
 
 One page, five sections: hero with a live simulated run → feature constellation → product
 screenshots → install flight plan → the privacy data map. English, Português (Brasil) and
@@ -143,9 +144,12 @@ to files and what the sitemap lists, so a page can't exist in one and not the ot
 
 ## Deploy
 
-Push to `main` → GitHub Actions checks, builds, deploys `dist/` to Cloudflare Pages and then
-verifies the deployment it just made against its own immutable URL, never the alias, which keeps
-serving the previous build at 200 while the new one activates (`.github/workflows/deploy.yml`).
-Needs `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
-repository secrets, and a Pages project whose name matches `--project-name` in the workflow.
+The current site's `apps/site` workspace in `tabrunner/tabrunner` owns normal publishing. Both
+repos target the same Cloudflare Pages project, `tabrunner`. Publishing this older standalone
+source would replace the current site.
+
+Main pushes here do not deploy. `.github/workflows/deploy.yml` retains `workflow_dispatch` for an
+explicitly approved manual run only. It checks, builds, deploys `dist/` and verifies the result
+against its own immutable URL, never the alias that can still serve the previous build.
+It needs `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets.
 `tabrunner.app` attaches as the custom domain.

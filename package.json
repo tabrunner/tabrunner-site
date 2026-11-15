@@ -4,6 +4,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "packageManager": "bun@1.4.4",
   "scripts": {
     "dev": "vite",
     "build:client": "vite build",
@@ -36,7 +37,7 @@
     "@vitejs/plugin-react": "^5.0.0",
     "puppeteer-core": "^25.5.0",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5.9.3",
+    "typescript": "^7.0.2",
     "vite": "^7.1.0"
   }
 }

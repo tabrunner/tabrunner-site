@@ -21,9 +21,11 @@ bun run og       # regenerate public/og.png (scripts/gen-og.ts)
 bun run shoot    # screenshot the built site, overflow report → preview/shots/ (gitignored output)
 ```
 
-Deploy: push to `main` fires `.github/workflows/deploy.yml` → Cloudflare Pages project
-`tabrunner` (tabrunner.pages.dev). Secrets `CLOUDFLARE_ACCOUNT_ID` / `CLOUDFLARE_API_TOKEN` live
-in GitHub. The job then **verifies this deployment's own immutable URL** (never the alias, which
+Normal publishing belongs to `apps/site` in `tabrunner/tabrunner`. This older standalone repo
+uses the same Cloudflare Pages project, `tabrunner`, so a main push here must not deploy.
+`.github/workflows/deploy.yml` is manual-only and needs explicit approval to run. Secrets
+`CLOUDFLARE_ACCOUNT_ID` / `CLOUDFLARE_API_TOKEN` live in GitHub. A manual run then
+**verifies this deployment's own immutable URL** (never the alias, which
 serves the previous build at 200 while the new one activates): every sitemap address must answer
 200 with its own title and language and a rendered body, three typos must be real 404s, and
 robots/sitemap must not be answered by HTML. Downloads hotlink the extension repo's `releases/latest` aliases — never hardcode a
@@ -31,8 +33,8 @@ version.
 
 ## Conventions
 
-- Vite + React 19 + Tailwind 4 + bun. TypeScript strict. No component library — hand-built
-  sections in `src/components/`, one per section (Hero, Features, Screenshots, Install, Privacy,
+- Vite + React 19 + Tailwind 4 + Bun 1.4.4. TypeScript 7, strict mode. No component library;
+  hand-built sections in `src/components/`, one per section (Hero, Features, Screenshots, Install, Privacy,
   Footer, Nav, RunConsole, CometField, CometMark), plus the DocsPage and its CodeBlock, and the
   LanguageSwitcher that Nav (from `sm`) and Footer (phones) share.
 - **i18n:** en-US / pt-BR / es-ES, catalogs in `src/i18n/locales/*.ts` (typed off en-US). Add keys
