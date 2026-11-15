@@ -1,8 +1,8 @@
 name: Deploy to Cloudflare Pages
 
+# Normal publishing belongs to tabrunner/tabrunner's apps/site workspace.
+# This older source shares its Pages project and must not publish on a main push.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 jobs:
